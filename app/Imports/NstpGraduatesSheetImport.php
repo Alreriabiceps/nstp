@@ -14,8 +14,8 @@ class NstpGraduatesSheetImport implements ToCollection, WithBatchInserts, WithHe
     public function collection(Collection $rows)
     {
         foreach ($rows as $row) {
-            if( $row['nstp_serial_number']) {
-                $student = Student::where('seq_no', $row['seqno'])->first();
+            if( $row['seqno'] && $row['nstp_graduation_year']) {
+                $student = Student::where('seq_no', $row['seqno'])->where('enrollment_year', $row['nstp_graduation_year'])->first();
 
                 $student->update([
                     'nstp_serial_no' => $row['nstp_serial_number'],

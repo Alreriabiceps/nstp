@@ -18,11 +18,12 @@ class NstpEnrollmentSheetImport implements ToCollection, WithBatchInserts, WithH
     public function collection(Collection $rows)
     {
         Log::info('Students: ' . $rows);
-        $password = Hash::make(1);
+        $password = Hash::make(12345);
         foreach ($rows as $row) {
             if($row['nstp_enrollment_year']) {
                 $student = Student::firstOrCreate([
                     'seq_no' => $row['seqno'],
+                    'enrollment_year' => $row['nstp_enrollment_year'],
                 ], [
                     'first_name' => (string)$row['first_name'],
                     'last_name' => (string)$row['last_name'],
@@ -40,17 +41,20 @@ class NstpEnrollmentSheetImport implements ToCollection, WithBatchInserts, WithH
                     'brgy' => (string)$row['street_brgy'],
 
                     'enrollment_type' => $row['nstp_component_cwtsltsrotc'],
-                    'enrollment_year' => $row['nstp_enrollment_year'],
 
                     'course_id' => $this->findCourseId($row['programcourse']) ?? null,
                     'year_level' => $row['year_level'] ?? 1,
                 ]);
 
                 if($student->email) {
-                    User::firstOrCreate([
+                    $user = User::firstOrCreate([
                         'username' => $student->email,
                         'role' => Role::Student,
                         'password' => $password,
+                    ]);
+
+                    $student->update([
+                        'user_id' => $user->id,
                     ]);
                 }
             }

@@ -25,6 +25,7 @@ const props = defineProps({
                         <h3 class="text-2xl font-semibold">{{ student.last_name }}, {{ student.first_name }} {{ student.middle_name }}</h3>
                         <p class="text-lg font-bold">Course: <span class="font-normal">{{ student.course.name }}</span></p>
                         <p class="text-lg font-bold">Section: <span class="font-normal">{{ student.section }}</span></p>
+                        <p class="text-lg font-bold">Student ID: <span class="font-normal">{{ student.student_id }}</span></p>
                     </div>
                     <div class="p-6 text-gray-900"></div>
                 </div>

@@ -26,7 +26,7 @@ class StudentController extends Controller
             $query = Student::query()
             ->with('course');
 
-            $query->select('*', DB::raw("CONCAT(first_name, ' ', middle_name, ' ', last_name) AS full_name"));
+            $query->select('*', DB::raw("CONCAT(first_name, ' ', last_name) AS full_name"));
 
             if ($request->enrollment_type !== null) {
                 $query->where('enrollment_type', $request->enrollment_type);
@@ -39,7 +39,6 @@ class StudentController extends Controller
             if($request->search != null) {
                 $query->whereAny([
                     'last_name',
-                    'middle_name',
                     'first_name',
                 ], 'LIKE', '%'.$request->search.'%');
             }
