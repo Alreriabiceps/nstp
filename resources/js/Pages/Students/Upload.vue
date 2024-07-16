@@ -12,7 +12,7 @@ const enrolledForm = useForm({
 });
 
 const graduatesForm = useForm({
-    graduate_file: null,
+    graduates_file: null,
     processing: false,
 });
 
@@ -82,7 +82,7 @@ function uploadGraduates() {
                                     <InputError
                                         class="mt-2"
                                         :message="
-                                            enrolledForm.errors.batch_student_file
+                                            enrolledForm.errors.enrolled_file
                                         "
                                     />
                                 </div>
@@ -110,7 +110,7 @@ function uploadGraduates() {
                                         type="file"
                                         class="mt-1 block w-full"
                                         @input="
-                                            graduatesForm.graduate_file =
+                                            graduatesForm.graduates_file =
                                                 $event.target.files[0]
                                         "
                                         required
@@ -120,7 +120,7 @@ function uploadGraduates() {
                                     <InputError
                                         class="mt-2"
                                         :message="
-                                            graduatesForm.errors.batch_student_file
+                                            graduatesForm.errors.graduates_file
                                         "
                                     />
                                 </div>

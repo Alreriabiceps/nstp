@@ -13,13 +13,11 @@ class NstpGraduatesSheetImport implements ToCollection, WithBatchInserts, WithHe
 {
     public function collection(Collection $rows)
     {
-        Log::info('Students: ' . $rows);
-
         foreach ($rows as $row) {
-            if($row['nstp_enrollment_year']) {
-                Student::updateOrCreate([
-                    'email' => (string)$row['email_address'],
-                ], [
+            if( $row['nstp_serial_number']) {
+                $student = Student::where('seq_no', $row['seqno'])->first();
+
+                $student->update([
                     'nstp_serial_no' => $row['nstp_serial_number'],
                 ]);
             }
