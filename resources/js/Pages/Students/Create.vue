@@ -3,7 +3,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head, useForm } from "@inertiajs/vue3";
 import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
+import PrimaryButton from "@/Components/Buttons/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 
 defineProps({
@@ -214,8 +214,8 @@ const submit = () => {
                                         v-model="form.sex"
                                         required
                                     >
-                                        <option value="Male">Male</option>
-                                        <option value="Female">Female</option>
+                                        <option value="M">Male</option>
+                                        <option value="F">Female</option>
                                     </select>
                                     <InputError
                                         class="mt-2"

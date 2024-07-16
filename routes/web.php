@@ -29,7 +29,8 @@ Route::middleware('auth')->group(function () {
         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
         Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-        Route::post('students/import', [UploadStudentController::class, 'import'])->name('students.import');
+        Route::post('students/import-enrolled', [UploadStudentController::class, 'importEnrolled'])->name('students.import-enrolled');
+        Route::post('students/import-graduates', [UploadStudentController::class, 'importGraduates'])->name('students.import-graduates');
         Route::get('students/upload', [UploadStudentController::class, 'create'])->name('students.upload');
 
         Route::resource('students', StudentController::class);

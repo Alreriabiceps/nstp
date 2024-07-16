@@ -22,7 +22,7 @@ class StudentFactory extends Factory
             'middle_name' => $this->faker->randomElement(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']),
             'extension_name' => $this->faker->randomElement(['Jr', '']),
             'course_id' => $this->faker->numberBetween(1, 4),
-            'sex' => $this->faker->randomElement(['Male', 'Female']),
+            'sex' => $this->faker->randomElement(['M', 'F']),
             'birthdate' => $this->faker->date(),
             'email' => $this->faker->unique()->safeEmail,
             'phone' => $this->faker->phoneNumber,

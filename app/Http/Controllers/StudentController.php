@@ -20,31 +20,37 @@ class StudentController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Student::query()
+        $students = collect();
+
+        if ($request->course_id) {
+            $query = Student::query()
             ->with('course');
+
             $query->select('*', DB::raw("CONCAT(first_name, ' ', middle_name, ' ', last_name) AS full_name"));
-        if ($request->enrollment_type !== null) {
-            $query->where('enrollment_type', $request->enrollment_type);
-        }
 
-        if ($request->enrollment_year !== null) {
-            $query->where('enrollment_type', $request->enrollment_year);
-        }
+            if ($request->enrollment_type !== null) {
+                $query->where('enrollment_type', $request->enrollment_type);
+            }
 
-        if($request->search != null) {
-            $query->whereAny([
-                'last_name',
-                'middle_name',
-                'first_name',
-            ], 'LIKE', '%'.$request->search.'%');
-        }
+            if ($request->enrollment_year !== null) {
+                $query->where('enrollment_type', $request->enrollment_year);
+            }
 
-        if ($request->course_id !== null) {
-            $query->where('course_id', $request->course_id);
-            $query->orderBy('seq_no');
-        }
+            if($request->search != null) {
+                $query->whereAny([
+                    'last_name',
+                    'middle_name',
+                    'first_name',
+                ], 'LIKE', '%'.$request->search.'%');
+            }
 
-        $students = $query->get();
+            if ($request->course_id !== null) {
+                $query->where('course_id', $request->course_id);
+                $query->orderBy('seq_no');
+            }
+
+            $students = $query->get();
+        }
 
         $courses = Course::query()
             ->orderBy('name')
@@ -53,6 +59,7 @@ class StudentController extends Controller
         $graduationYears = [];
         $startYear = 2023;
         $currentYear = date('Y');
+
         for ($year = $startYear; $year <= $currentYear; $year++) {
             $graduationYears[] = $year.'/'.($year + 1);
         }
@@ -60,7 +67,6 @@ class StudentController extends Controller
         return Inertia::render('Students/Index', [
             'students' => $students,
             'courses' => $courses,
-
             'graduationYears' => $graduationYears,
         ]);
     }

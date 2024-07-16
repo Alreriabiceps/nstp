@@ -4,8 +4,10 @@ namespace App\Imports;
 
 use App\Models\Course;
 use App\Models\Student;
-use App\Services\UserService;
+use App\Models\User;
+use App\Role;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
@@ -15,10 +17,11 @@ class NstpEnrollmentSheetImport implements ToCollection, WithBatchInserts, WithH
 {
     public function collection(Collection $rows)
     {
-        Log::info('Student: ' . $rows[0]['year_level']);
+        Log::info('Students: ' . $rows);
+        $password = Hash::make(1);
         foreach ($rows as $row) {
             if($row['nstp_enrollment_year']) {
-                Student::firstOrCreate([
+                $student = Student::firstOrCreate([
                     'seq_no' => $row['seqno'],
                 ], [
                     'first_name' => (string)$row['first_name'],
@@ -42,19 +45,16 @@ class NstpEnrollmentSheetImport implements ToCollection, WithBatchInserts, WithH
                     'course_id' => $this->findCourseId($row['programcourse']) ?? null,
                     'year_level' => $row['year_level'] ?? 1,
                 ]);
+
+                if($student->email) {
+                    User::firstOrCreate([
+                        'username' => $student->email,
+                        'role' => Role::Student,
+                        'password' => $password,
+                    ]);
+                }
             }
         }
-
-        // Student::insert($students);
-        // $userService = new UserService();
-        // foreach ($students as $student) {
-        //     if ($student->student_id) {
-        //         $userService->create([
-        //             'student_id' => $student->student_id,
-        //             'role' => 'student'
-        //         ]);
-        //     }
-        // }
     }
 
     public function headingRow(): int

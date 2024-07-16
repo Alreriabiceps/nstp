@@ -1,6 +1,15 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { Head, useForm } from "@inertiajs/vue3";
+import EditIcon from "@/Components/Icons/EditIcon.vue";
+import DeleteIcon from "@/Components/Icons/DeleteIcon.vue";
+import ShowIcon from "@/Components/Icons/ShowIcon.vue";
+import DownloadIcon from "@/Components/Icons/DownloadIcon.vue";
+import FileUploadIcon from "@/Components/Icons/FileUploadIcon.vue";
+import PlusIcon from "@/Components/Icons/PlusIcon.vue";
+import FilterIcon from "@/Components/Icons/FilterIcon.vue";
+import SelectAllIcon from "@/Components/Icons/SelectAllIcon.vue";
+import InputLabel from "@/Components/InputLabel.vue";
+import { Head, useForm, router } from "@inertiajs/vue3";
 import { ref } from "vue";
 
 const props = defineProps({
@@ -67,6 +76,37 @@ const selectAll = () => {
     }
     toggleSelectAll.value = !toggleSelectAll.value;
 };
+
+const searchForm = useForm({
+    search: "",
+    course_id: "",
+    semester: "",
+});
+
+const submitSearch = () => {
+    const queryParams = new URLSearchParams({
+        search: searchForm.search,
+        course_id: searchForm.course_id,
+        semester: searchForm.semester,
+    }).toString();
+
+
+    // Append query parameters to the base URL
+    const urlWithParams = `students?${queryParams}`;
+
+    router.visit(urlWithParams, {
+            preserveScroll: true,
+            preserveState: true,
+            replace: true,
+        }
+    );
+};
+
+const retainSearchFormValues = () => {
+    searchForm.search = localStorage.getItem('search') || '';
+    searchForm.course_id = localStorage.getItem('course_id') || '';
+    searchForm.semester = localStorage.getItem('semester') || '';
+};
 </script>
 
 <template>
@@ -86,55 +126,91 @@ const selectAll = () => {
                         <a
                             href="/students/create"
                             type="button"
-                            class="py-2 px-4 bg-blue-500 text-white rounded text-sm"
-                            >Add Student</a
+                            class="py-2 px-2 bg-blue-500 text-white rounded text-sm"
+                            ><PlusIcon class="h-4 w-5" /> Add Student</a
                         >
                         <a
                             href="/students/upload"
                             type="button"
-                            class="py-2 px-4 bg-lime-500 text-white rounded text-sm"
-                            >Batch Upload</a
+                            class="py-2 px-2 bg-lime-500 text-white rounded text-sm"
+                            ><FileUploadIcon class="h-4 w-5" /> Batch Upload</a
                         >
                     </div>
+
+                    <!-- Search -->
                     <div class="p-2">
-                        <form method="GET" action="">
-                            <div class="mb-4">
-                                <label for="search" value="Search" />
-                                <input
-                                    id="search"
-                                    class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full"
-                                    type="text"
-                                    name="search"
-                                    placeholder="Search"
-                                    value=""
-                                />
+                        <form @submit.prevent="submitSearch" method="POST">
+                            <div class="flex mb-4">
+                                <div class="w-1/2">
+                                    <InputLabel
+                                        for="search"
+                                        value="Search"
+                                    />
+                                    <input
+                                        id="search"
+                                        class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full"
+                                        type="text"
+                                        name="search"
+                                        placeholder="Search"
+                                        v-model="searchForm.search"
+                                    />
+                                </div>
                             </div>
-                            <div class="mb-4">
-                                <label for="course" value="Course/Program" />
-                                <select
-                                    id="course"
-                                    class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full"
-                                    name="course_id"
-                                    value=""
-                                    required
-                                >
-                                    <option value="0">
-                                        Please Select Course
-                                    </option>
-                                    <option
-                                        v-for="course in courses"
-                                        :value="course.id"
-                                        :key="course.id"
+                            <div class="flex mb-4 space-x-4">
+                                <div class="w-1/3">
+                                    <InputLabel
+                                        for="course"
+                                        value="Course/Program"
+                                    />
+                                    <select
+                                        id="course"
+                                        class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full"
+                                        name="course_id"
+                                        v-model="searchForm.course_id"
+                                        required
                                     >
-                                        {{ course.name }}
-                                    </option>
-                                </select>
+                                        <option value="" hidden>
+                                            Please Select Course
+                                        </option>
+                                        <option
+                                            v-for="course in courses"
+                                            :value="course.id"
+                                            :key="course.id"
+                                        >
+                                            {{ course.name }}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="w-1/3">
+                                    <InputLabel
+                                        for="semester"
+                                        value="Semester"
+                                    />
+                                    <select
+                                        id="course"
+                                        class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full"
+                                        name="course_id"
+                                        value=""
+                                        v-model="searchForm.semester"
+                                    >
+                                        <option value="" hidden>
+                                            Please Select Semester
+                                        </option>
+                                        <option value="first">
+                                            First Semester
+                                        </option>
+                                        <option value="second">
+                                            Second Semester
+                                        </option>
+                                    </select>
+                                </div>
                             </div>
                             <button
                                 type="submit"
-                                class="py-2 px-4 bg-blue-500 text-white rounded"
+                                class="py-2 px-2 bg-blue-500 text-white rounded"
                             >
                                 Filter
+                                <FilterIcon class="h-4 w-4" />
                             </button>
                         </form>
                     </div>
@@ -143,17 +219,18 @@ const selectAll = () => {
                         <button
                             @click="selectAll"
                             type="button"
-                            class="py-2 px-4 bg-gray-500 text-white rounded text-sm"
+                            class="py-2 px-2 bg-gray-500 text-white rounded text-sm"
                         >
-                            Select all
+                            <SelectAllIcon class="h-4 w-4" /> Select all
                         </button>
                         <a
                             href="#"
                             @click="downloadCertificate"
                             id="downloadCertificateButton"
-                            class="py-2 px-4 bg-indigo-500 text-white rounded text-sm"
-                            >Download Certificate</a
+                            class="py-2 px-2 bg-indigo-500 text-white rounded text-sm"
                         >
+                            <DownloadIcon class="h-4 w-4" /> Download Certificate
+                        </a>
                     </div>
 
                     <div v-if="certificateModal">
@@ -249,6 +326,12 @@ const selectAll = () => {
                                     scope="col"
                                     class="px-6 py-2 text-left text-sm font-medium text-gray-500 uppercase tracking-wider"
                                 >
+                                    Status
+                                </th>
+                                <th
+                                    scope="col"
+                                    class="px-6 py-2 text-left text-sm font-medium text-gray-500 uppercase tracking-wider"
+                                >
                                     Actions
                                 </th>
                             </tr>
@@ -282,21 +365,35 @@ const selectAll = () => {
                                 <td class="px-2 py-1 whitespace-nowrap text-xs">
                                     {{ student.enrollment_year }}
                                 </td>
+                                <td class="px-2 py-1 whitespace-nowrap text-xs">
+                                    <div v-if="student.status === 1" class="text-green-500">
+                                        Passed
+                                    </div>
+                                    <div v-else class="text-red-500">
+                                        Incomplete
+                                    </div>
+                                </td>
                                 <td class="px-2 py-1 whitespace-nowrap text-sm space-x-2">
                                     <a
                                         :href="`/students/${student.id}`"
-                                        class="text-blue-600 hover:text-green-900"
-                                        >Show</a
+                                        class="text-blue-500 hover:text-blue-700"
+                                        >
+                                            <ShowIcon class="h-4 w-4" />
+                                        </a
                                     >
                                     <a
                                         :href="`/students/${student.id}/edit`"
-                                        class="text-green-600 hover:text-green-900"
-                                        >Edit</a
+                                        class="text-green-500 hover:text-green-700"
+                                        >
+                                            <EditIcon class="h-4 w-4" />
+                                        </a
                                     >
                                     <a
                                         :href="`/students/${student.id}/delete`"
-                                        class="text-red-600 hover:text-red-900"
-                                        >Delete</a
+                                        class="text-red-400 hover:text-red-600"
+                                        >
+                                            <DeleteIcon class="h-4 w-4" />
+                                        </a
                                     >
                                 </td>
                             </tr>
