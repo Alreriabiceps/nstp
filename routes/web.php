@@ -21,6 +21,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/first-login', [ProfileController::class, 'firstLogin'])->name('profile.first-login');
     Route::post('/first-login', [AuthStudentController::class, 'firstLogin'])->name('student.first-login');
     Route::post('/update-student', [AuthStudentController::class, 'update'])->name('student.update');
+    Route::post('/update-admin', [AuthStudentController::class, 'updateAdmin'])->name('admin.update');
 
     Route::middleware(FirstLoginMiddleware::class)->group(function () {
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

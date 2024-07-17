@@ -23,7 +23,7 @@ class StudentsSeeder extends Seeder
             $password = 12345;
 
             $user = User::create([
-                'username' => Str::upper($student->email),
+                'username' => $student->email,
                 'password' => Hash::make($password),
                 'role' => Role::Student,
             ]);
