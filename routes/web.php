@@ -1,11 +1,13 @@
 <?php
 
+use App\Http\Controllers\Auth\AdminController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\StudentController as AuthStudentController;
 use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DownloadCertificateController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\UploadStudentController;
@@ -15,13 +17,11 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [AuthenticatedSessionController::class, 'create'])
     ->middleware('guest');
 
-
-
 Route::middleware('auth')->group(function () {
     Route::get('/first-login', [ProfileController::class, 'firstLogin'])->name('profile.first-login');
     Route::post('/first-login', [AuthStudentController::class, 'firstLogin'])->name('student.first-login');
     Route::post('/update-student', [AuthStudentController::class, 'update'])->name('student.update');
-    Route::post('/update-admin', [AuthStudentController::class, 'updateAdmin'])->name('admin.update');
+    Route::post('/update-admin', [AdminController::class, 'update'])->name('admin.update');
 
     Route::middleware(FirstLoginMiddleware::class)->group(function () {
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -33,6 +33,8 @@ Route::middleware('auth')->group(function () {
         Route::post('students/import-enrolled', [UploadStudentController::class, 'importEnrolled'])->name('students.import-enrolled');
         Route::post('students/import-graduates', [UploadStudentController::class, 'importGraduates'])->name('students.import-graduates');
         Route::get('students/upload', [UploadStudentController::class, 'create'])->name('students.upload');
+
+        Route::get('students/{student}/reset-password', [StudentController::class, 'resetPassword'])->name('students.reset-password');
 
         Route::resource('students', StudentController::class);
         Route::resource('courses', CourseController::class);

@@ -84,7 +84,6 @@ onMounted(() => {
                     type="file"
                     class="mt-1 block w-full"
                     @input="form.image = $event.target.files[0]"
-                    required
                 />
 
                 <InputError :message="form.errors.image" class="mt-2" />
@@ -96,7 +95,6 @@ onMounted(() => {
                     type="text"
                     class="mt-1 block w-full"
                     v-model="form.student_id"
-                    required
                 />
 
                 <InputError :message="form.errors.student_id" class="mt-2" />
@@ -108,7 +106,6 @@ onMounted(() => {
                     type="text"
                     class="mt-1 block w-full"
                     v-model="form.section"
-                    required
                 />
 
                 <InputError :message="form.errors.section" class="mt-2" />

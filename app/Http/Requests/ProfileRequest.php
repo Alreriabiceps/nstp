@@ -12,14 +12,10 @@ class ProfileRequest extends FormRequest
     {
         return [
             'image' => ['required', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
-            'student_id' => [
-                'required',
-                'string',
-                'max:255',
-            ],
+            'student_id' => ['required', 'string', 'max:255', "digits:11"],
             'section' => ['required', 'string', 'max:255'],
             'current_password' => ['required', 'current_password'],
-            'password' => ['required', Password::defaults(), 'confirmed'],
+            'password' => ['required', Password::defaults(), 'confirmed', 'min_digits:8'],
         ];
     }
 
@@ -37,6 +33,7 @@ class ProfileRequest extends FormRequest
             'current_password.required' => 'Current password is required',
             'password.required' => 'Password is required',
             'password.confirmed' => 'Passwords do not match',
+            'password.min_digits' => 'Password must be 8 characters',
         ];
     }
 }

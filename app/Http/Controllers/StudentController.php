@@ -26,8 +26,6 @@ class StudentController extends Controller
             $query = Student::query()
             ->with('course');
 
-            $query->select('*', DB::raw("CONCAT(first_name, ' ', last_name) AS full_name"));
-
             if ($request->enrollment_type !== null) {
                 $query->where('enrollment_type', $request->enrollment_type);
             }
@@ -48,6 +46,14 @@ class StudentController extends Controller
                 $query->orderBy('seq_no');
             }
 
+            if ($request->school_year !== null) {
+                $query->where('enrollment_year', $request->school_year);
+            }
+
+            if($request->status !== null) {
+                $query->where('enrollment_status', $request->status);
+            }
+
             $students = $query->get();
         }
 
@@ -55,13 +61,11 @@ class StudentController extends Controller
             ->orderBy('name')
             ->get();
 
-        $graduationYears = [];
-        $startYear = 2023;
-        $currentYear = date('Y');
 
-        for ($year = $startYear; $year <= $currentYear; $year++) {
-            $graduationYears[] = $year.'/'.($year + 1);
-        }
+        $graduationYears = Student::query()
+            ->select('enrollment_year')
+            ->groupBy('enrollment_year')
+            ->pluck('enrollment_year');
 
         return Inertia::render('Students/Index', [
             'students' => $students,
@@ -120,13 +124,10 @@ class StudentController extends Controller
             ->orderBy('name')
             ->get();
 
-        $graduationYears = [];
-        $startYear = 2023;
-        $currentYear = date('Y');
-
-        for ($year = $startYear; $year <= $currentYear; $year++) {
-            $graduationYears[] = $year.'/'.($year + 1);
-        }
+        $graduationYears = Student::query()
+            ->select('enrollment_year')
+            ->groupBy('enrollment_year')
+            ->pluck('enrollment_year');
 
         return  Inertia::render('Students/Edit', [
             'student' => $student,
@@ -151,5 +152,16 @@ class StudentController extends Controller
     public function destroy(Student $student)
     {
         //
+    }
+
+    public function resetPassword(Student $student)
+    {
+        $user = User::where('username', $student->email)->first();
+
+        $user->update([
+            'password' => Hash::make(12345678),
+        ]);
+
+        return redirect()->route('students.index');
     }
 }

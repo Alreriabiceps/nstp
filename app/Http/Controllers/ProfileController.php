@@ -26,6 +26,7 @@ class ProfileController extends Controller
         $student = Student::where('user_id', $request->user()->id)->first();
 
         return Inertia::render('Profile/Edit', [
+            'user' => $request->user(),
             'student' => $student,
             'status' => session('status'),
         ]);

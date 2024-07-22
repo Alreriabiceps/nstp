@@ -67,17 +67,18 @@ function uploadGraduates() {
                                         for="enrolled_file"
                                         value="Upload Enrolled Students"
                                     />
-                                    <TextInput
-                                        id="enrolled_file"
+                                    <input
                                         type="file"
+                                        id="enrolled_file"
                                         class="mt-1 block w-full"
+                                        name="enrolled_file"
                                         @input="
                                             enrolledForm.enrolled_file =
                                                 $event.target.files[0]
                                         "
                                         required
                                         autofocus
-                                    />
+                                    >
                                     <p v-if="enrolledForm.processing" class="mt-2 ">Please wait...</p>
                                     <InputError
                                         class="mt-2"
@@ -92,7 +93,7 @@ function uploadGraduates() {
                                 <button
                                     class="ms-4 inline-flex items-center px-2 py-2 bg-amber-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-amber-700 focus:bg-amber-700 active:bg-green-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150"
                                     :class="{ 'opacity-25': enrolledForm.processing }"
-                                    :disabled="enrolledForm.processing"
+                                    :disabled="enrolledForm.processing || graduatesForm.processing"
                                 >
                                     Upload
                                 </button>
@@ -105,17 +106,18 @@ function uploadGraduates() {
                                         for="graduates_file"
                                         value="Upload Graduate Students"
                                     />
-                                    <TextInput
-                                        id="graduates_file"
+                                    <input
                                         type="file"
+                                        id="graduates_file"
                                         class="mt-1 block w-full"
+                                        name="graduates_file"
                                         @input="
-                                            graduatesForm.graduates_file =
+                                            enrolledForm.graduates_file =
                                                 $event.target.files[0]
                                         "
                                         required
                                         autofocus
-                                    />
+                                    >
                                     <p v-if="graduatesForm.processing" class="mt-2 ">Please wait...</p>
                                     <InputError
                                         class="mt-2"
@@ -130,7 +132,7 @@ function uploadGraduates() {
                                 <button
                                     class="ms-4 inline-flex items-center px-2 py-2 bg-green-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 focus:bg-green-700 active:bg-green-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150"
                                     :class="{ 'opacity-25': graduatesForm.processing }"
-                                    :disabled="graduatesForm.processing"
+                                    :disabled="graduatesForm.processing || enrolledForm.processing"
                                 >
                                     Upload
                                 </button>

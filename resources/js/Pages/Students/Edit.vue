@@ -59,6 +59,18 @@ const submit = () => {
     });
 };
 
+const resetPassword = async () => {
+    try {
+        await axios.get(
+            route("students.reset-password", props.student.id)
+        );
+
+        alert("Password Update Successful!");
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 onMounted(() => {
     form.student_id = props.student.student_id;
     form.first_name = props.student.first_name;
@@ -468,10 +480,19 @@ onMounted(() => {
                                     :class="{ 'opacity-25': form.processing }"
                                     :disabled="form.processing"
                                 >
-                                    Create
+                                    Update
                                 </PrimaryButton>
                             </div>
                         </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="py-12">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6 text-gray-900">
+                        <button type="button" class="bg-red-500 hover:bg-red-600 px-2 py-1 rounded text-white" @click="resetPassword">Password Reset</button>
                     </div>
                 </div>
             </div>

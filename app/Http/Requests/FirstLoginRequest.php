@@ -11,10 +11,10 @@ class FirstLoginRequest extends FormRequest
     {
         return [
             'image' => ['required', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
-            'student_id' => ['required', 'string', 'max:255', 'unique:students,student_id'],
+            'student_id' => ['required', 'string', 'max:255', 'unique:students,student_id', "digits:11"],
             'section' => ['required', 'string', 'max:255'],
             'current_password' => ['required', 'current_password'],
-            'password' => ['required', Password::defaults(), 'confirmed'],
+            'password' => ['required', 'confirmed', Password::min(8)],
         ];
     }
 

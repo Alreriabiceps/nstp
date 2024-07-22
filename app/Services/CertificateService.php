@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Student;
+use App\Models\User;
 use Illuminate\Support\Carbon;
 use setasign\Fpdi\Tcpdf\Fpdi;
 
@@ -13,6 +14,8 @@ class CertificateService
         $studentName = $student->first_name. ' '. $student->middle_name. ' ' . $student->last_name .' '. $student->extension_name;
 
         $academicYear = "for two academic semester,  Academic year ". $student->enrollment_year;
+        $user = User::where('id', 1)->first();
+        $coordinatorName = Str::upper($user->first_name. ' '. $user->middle_name. ' ' . $user->last_name .' '. $user->extension_name);
 
         $date = Carbon::parse($date)->format('Y-m-d');
         $monthYear = Carbon::createFromFormat('Y-m-d', $date)->format('F Y');
@@ -46,6 +49,9 @@ class CertificateService
 
         $studentNameWidth = $pdf->GetStringWidth($studentName, '', 'Times', 36);
         $startXName = (($pageWidth  - $studentNameWidth) / 2) - 24;
+
+        $coordinatorNameWidth = $pdf->GetStringWidth($studentName, '', 'Times', 14);
+        $startCoordinatorName = (($pageWidth  - $coordinatorNameWidth) / 2) - 24;
 
         $serialNumber = $student->nstp_serial_no;
 

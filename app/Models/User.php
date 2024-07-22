@@ -22,7 +22,12 @@ class User extends Authenticatable
         'password',
         'role',
         'first_login',
-        'password_change_required'
+        'password_change_required',
+        'image',
+        'first_name',
+        'MI',
+        'last_name',
+        'ext_name',
     ];
 
     /**

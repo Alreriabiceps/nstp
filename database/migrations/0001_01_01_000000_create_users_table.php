@@ -18,6 +18,11 @@ return new class extends Migration
             $table->string('role')->default('student');
             $table->boolean('first_login')->default(true);
             $table->boolean('password_change_required')->default(true);
+            $table->string('image')->nullable();
+            $table->string('first_name')->default('Erico Marco');
+            $table->string('MI')->default('S');
+            $table->string('last_name')->default('Alarcon');
+            $table->string('ext_name')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

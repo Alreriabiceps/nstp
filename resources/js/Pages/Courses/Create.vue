@@ -41,7 +41,7 @@ const submit = () => {
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900">
-                        <form @submit.prevent method="POST">
+                        <form @submit.prevent="submit" method="POST">
                             <div class="flex flex-wrap -mx-3 mb-6">
                                 <div class="w-full md:w-2/4 px-3 mb-4 md:mb-0">
                                     <InputLabel
