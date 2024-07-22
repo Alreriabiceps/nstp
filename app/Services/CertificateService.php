@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Student;
 use App\Models\User;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
 use setasign\Fpdi\Tcpdf\Fpdi;
 
 class CertificateService
@@ -15,7 +16,7 @@ class CertificateService
 
         $academicYear = "for two academic semester,  Academic year ". $student->enrollment_year;
         $user = User::where('id', 1)->first();
-        $coordinatorName = Str::upper($user->first_name. ' '. $user->middle_name. ' ' . $user->last_name .' '. $user->extension_name);
+        $coordinatorName = Str::upper($user->first_name. ' '. $user->MI. '. ' . $user->last_name .' '. $user->extension_name);
 
         $date = Carbon::parse($date)->format('Y-m-d');
         $monthYear = Carbon::createFromFormat('Y-m-d', $date)->format('F Y');
@@ -51,7 +52,6 @@ class CertificateService
         $startXName = (($pageWidth  - $studentNameWidth) / 2) - 24;
 
         $coordinatorNameWidth = $pdf->GetStringWidth($studentName, '', 'Times', 14);
-        $startCoordinatorName = (($pageWidth  - $coordinatorNameWidth) / 2) - 24;
 
         $serialNumber = $student->nstp_serial_no;
 
@@ -69,6 +69,11 @@ class CertificateService
         $pdf->SetFont('Times', '', 12);
         $pdf->SetXY($startCertificateDate, 138);
         $pdf->Write(0, $certificateDate);
+
+        // Add coordinator name
+        $pdf->SetFont('Times', 'B', 12);
+        $pdf->SetXY(54, 161);
+        $pdf->Write(0, $coordinatorName);
 
         //Add serial number
         $pdf->SetFont('Times', '', 12);
