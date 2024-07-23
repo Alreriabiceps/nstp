@@ -8,8 +8,9 @@ import FileUploadIcon from "@/Components/Icons/FileUploadIcon.vue";
 import PlusIcon from "@/Components/Icons/PlusIcon.vue";
 import FilterIcon from "@/Components/Icons/FilterIcon.vue";
 import SelectAllIcon from "@/Components/Icons/SelectAllIcon.vue";
+import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
-import { Head, useForm, router } from "@inertiajs/vue3";
+import { Head, useForm } from "@inertiajs/vue3";
 import { ref } from "vue";
 
 const props = defineProps({
@@ -25,16 +26,18 @@ const props = defineProps({
         type: Array,
         default: [],
     },
+    search: String,
+    course_id: String,
+    semester: String,
+    school_year: String,
+    status: String,
 });
 
 const downloadCertificateForm = useForm({
     student_ids: [],
     certificate_date: null,
-});
-
-const statusUpdateForm = useForm({
-    student_ids: [],
-    status: null,
+    first_sem_status: "",
+    second_sem_status: "",
 });
 
 const downloadCertificate = () => {
@@ -47,6 +50,10 @@ const downloadCertificate = () => {
 };
 
 const updateStatus = () => {
+    if (downloadCertificateForm.student_ids.length === 0) {
+        alert("Please select students to update status.");
+        return;
+    }
     updateStatusModal.value = true;
 };
 
@@ -78,15 +85,12 @@ const downloadCertificateSubmit = async () => {
         console.error("Error downloading certificates:", error);
     }
 };
+
 const selectAll = () => {
     if (toggleSelectAll.value) {
         downloadCertificateForm.student_ids = [];
-        statusUpdateForm.student_ids = [];
     } else {
         downloadCertificateForm.student_ids = props.students.map(
-            (student) => student.id
-        );
-        statusUpdateForm.student_ids = props.students.map(
             (student) => student.id
         );
     }
@@ -94,38 +98,42 @@ const selectAll = () => {
 };
 
 const searchForm = useForm({
-    search: "",
-    course_id: "",
-    semester: "",
-    school_year: "",
-    status: "",
+    search: props.search || "",
+    course_id: props.course_id || "",
+    semester: props.semester || "",
+    school_year: props.school_year || "",
+    status: props.status || "",
 });
 
 const submitSearch = () => {
-    const queryParams = new URLSearchParams({
-        search: searchForm.search,
-        course_id: searchForm.course_id,
-        semester: searchForm.semester,
-        school_year: searchForm.school_year,
-        status: searchForm.status,
-    }).toString();
-
-    const urlWithParams = `students?${queryParams}`;
-
-    router.visit(urlWithParams, {
-            preserveScroll: true,
-            preserveState: true,
-            replace: true,
-        }
-    );
+    searchForm.get(route("students.index"), {
+        preserveState: true,
+        preserveScroll: true,
+    });
 };
 
-const retainSearchFormValues = () => {
-    searchForm.search = localStorage.getItem('search') || '';
-    searchForm.course_id = localStorage.getItem('course_id') || '';
-    searchForm.semester = localStorage.getItem('semester') || '';
-    searchForm.school_year = localStorage.getItem('school_year') || '';
-    searchForm.status = localStorage.getItem('status') || '';
+const form = useForm({});
+
+const deleteStudent = (studentId) => {
+    if (confirm("Are you sure you want to delete this student?")) {
+        form.delete(`/students/${studentId}`);
+    }
+};
+
+const statusUpdate = () => {
+    downloadCertificateForm.post(route('students-update-status'), {
+        onStart: () => {
+            form.processing = true;
+        },
+        onFinish: () => {
+            form.processing = false;
+        },
+        onSuccess: () => {
+            updateStatusModal.value = false;
+            downloadCertificateForm.reset();
+            alert("Update Successful");
+        },
+    });
 };
 </script>
 
@@ -162,10 +170,7 @@ const retainSearchFormValues = () => {
                         <form @submit.prevent="submitSearch" method="POST">
                             <div class="flex mb-4">
                                 <div class="w-1/2">
-                                    <InputLabel
-                                        for="search"
-                                        value="Search"
-                                    />
+                                    <InputLabel for="search" value="Search" />
                                     <input
                                         id="search"
                                         class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full"
@@ -241,16 +246,17 @@ const retainSearchFormValues = () => {
                                         <option value="" hidden>
                                             Please Select School Year
                                         </option>
-                                        <option v-for="gy in graduationYears" :key="gy" :value="gy">
+                                        <option
+                                            v-for="gy in graduationYears"
+                                            :key="gy"
+                                            :value="gy"
+                                        >
                                             {{ gy }}
                                         </option>
                                     </select>
                                 </div>
                                 <div class="w-1/3">
-                                    <InputLabel
-                                        for="status"
-                                        value="Status"
-                                    />
+                                    <InputLabel for="status" value="Status" />
                                     <select
                                         id="status"
                                         class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full"
@@ -288,16 +294,22 @@ const retainSearchFormValues = () => {
                         >
                             <SelectAllIcon class="h-4 w-4" /> Select all
                         </button>
-                        <a href="#" @click="updateStatus" id="updateStatusButton" class="py-2 px-2 bg-pink-500 hover:bg-pink-700 text-white rounded text-sm" >Update Status</a>
+                        <a
+                            href="#"
+                            @click="updateStatus"
+                            id="updateStatusButton"
+                            class="py-2 px-2 bg-pink-500 hover:bg-pink-700 text-white rounded text-sm"
+                            >Update Status</a
+                        >
                         <a
                             href="#"
                             @click="downloadCertificate"
                             id="downloadCertificateButton"
                             class="py-2 px-2 bg-indigo-500 hover:bg-indigo-700 text-white rounded text-sm"
                         >
-                            <DownloadIcon class="h-4 w-4" /> Download Certificate
+                            <DownloadIcon class="h-4 w-4" /> Download
+                            Certificate
                         </a>
-
                     </div>
 
                     <div v-if="certificateModal">
@@ -312,17 +324,25 @@ const retainSearchFormValues = () => {
                                     @submit.prevent="downloadCertificateSubmit"
                                 >
                                     <div class="mb-4">
-                                        <label for="certificate_date" value="Certificate Date" />
+                                        <InputLabel
+                                            for="certificate_date"
+                                            value="Certificate Date"
+                                        />
                                         <input
                                             id="certificate_date"
-                                            v-model="downloadCertificateForm.certificate_date"
+                                            v-model="
+                                                downloadCertificateForm.certificate_date
+                                            "
                                             class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full"
                                             type="date"
                                             required
                                         />
                                         <InputError
                                             class="mt-2"
-                                            :message="downloadCertificateForm.errors.certificate_date"
+                                            :message="
+                                                downloadCertificateForm.errors
+                                                    .certificate_date
+                                            "
                                         />
                                     </div>
                                     <div class="flex justify-end">
@@ -354,16 +374,72 @@ const retainSearchFormValues = () => {
                                 <h2 class="text-xl font-semibold mb-4">
                                     Update Status
                                 </h2>
-                                <form
-                                    @submit.prevent="statusUpdate"
-                                >
+                                <form @submit.prevent="statusUpdate" method="POST">
                                     <div class="mb-4">
-                                        <label for="search" value="Search" />
-
-                                        <!-- <InputError
+                                        <label
+                                            for="first_semester"
+                                            value="First Semester"
+                                        />
+                                        <InputLabel
+                                            for="first_semester"
+                                            value="First Semester"
+                                        />
+                                        <select
+                                            id="first_semester"
+                                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full"
+                                            name="first_semester"
+                                            v-model="
+                                                downloadCertificateForm.first_sem_status
+                                            "
+                                        >
+                                            <option value="" hidden>
+                                                Please Select Status
+                                            </option>
+                                            <option value="passed">
+                                                Passed
+                                            </option>
+                                            <option value="failed">
+                                                Failed
+                                            </option>
+                                        </select>
+                                        <InputError
                                             class="mt-2"
-                                            :message="statusUpdateForm.errors.status"
-                                        /> -->
+                                            :message="
+                                                downloadCertificateForm.errors
+                                                    .first_sem_status
+                                            "
+                                        />
+                                    </div>
+                                    <div class="mb-4">
+                                        <InputLabel
+                                            for="second_semester"
+                                            value="Second Semester"
+                                        />
+                                        <select
+                                            id="second_semester"
+                                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full"
+                                            name="second_semester"
+                                            v-model="
+                                                downloadCertificateForm.second_sem_status
+                                            "
+                                        >
+                                            <option value="" hidden>
+                                                Please Select Status
+                                            </option>
+                                            <option value="passed">
+                                                Passed
+                                            </option>
+                                            <option value="failed">
+                                                Failed
+                                            </option>
+                                        </select>
+                                        <InputError
+                                            class="mt-2"
+                                            :message="
+                                                downloadCertificateForm.errors
+                                                    .second_sem_status
+                                            "
+                                        />
                                     </div>
                                     <div class="flex justify-end">
                                         <button
@@ -450,7 +526,9 @@ const retainSearchFormValues = () => {
                                         :key="student.id"
                                         type="checkbox"
                                         class="form-checkbox h-4 w-4 text-blue-500 rounded"
-                                        v-model="downloadCertificateForm.student_ids"
+                                        v-model="
+                                            downloadCertificateForm.student_ids
+                                        "
                                         :value="student.id"
                                     />
                                 </td>
@@ -461,10 +539,20 @@ const retainSearchFormValues = () => {
                                     {{ student.student_id }}
                                 </td>
                                 <td class="px-2 py-1 whitespace-nowrap text-sm">
-                                    {{ student.full_name }}
+                                    {{
+                                        student.last_name +
+                                        ", " +
+                                        student.first_name +
+                                        " " +
+                                        student.middle_name
+                                    }}
                                 </td>
                                 <td class="px-2 py-1 whitespace-nowrap text-sm">
-                                    {{ student.course ? student.course.code : "" }}
+                                    {{
+                                        student.course
+                                            ? student.course.code
+                                            : ""
+                                    }}
                                 </td>
                                 <td class="px-2 py-1 whitespace-nowrap text-xs">
                                     {{ student.enrollment_type }}
@@ -473,35 +561,41 @@ const retainSearchFormValues = () => {
                                     {{ student.enrollment_year }}
                                 </td>
                                 <td class="px-2 py-1 whitespace-nowrap text-xs">
-                                    <div v-if="student.status === 1" class="text-green-500">
-                                        Passed
+                                    <div
+                                        v-if="
+                                            student.first_sem_status &&
+                                            student.second_sem_status
+                                        "
+                                        class="text-green-500"
+                                    >
+                                        Complete
                                     </div>
                                     <div v-else class="text-red-500">
                                         Incomplete
                                     </div>
                                 </td>
-                                <td class="px-2 py-1 whitespace-nowrap text-sm space-x-2">
+                                <td
+                                    class="px-2 py-1 whitespace-nowrap text-sm space-x-2"
+                                >
                                     <a
                                         :href="`/students/${student.id}`"
                                         class="text-blue-500 hover:text-blue-700"
-                                        >
-                                            <ShowIcon class="h-4 w-4" />
-                                        </a
                                     >
+                                        <ShowIcon class="h-4 w-4" />
+                                    </a>
                                     <a
                                         :href="`/students/${student.id}/edit`"
                                         class="text-green-500 hover:text-green-700"
-                                        >
-                                            <EditIcon class="h-4 w-4" />
-                                        </a
                                     >
+                                        <EditIcon class="h-4 w-4" />
+                                    </a>
                                     <a
-                                        :href="`/students/${student.id}/delete`"
+                                        href="#"
+                                        @click="deleteStudent(student.id)"
                                         class="text-red-400 hover:text-red-600"
-                                        >
-                                            <DeleteIcon class="h-4 w-4" />
-                                        </a
                                     >
+                                        <DeleteIcon class="h-4 w-4" />
+                                    </a>
                                 </td>
                             </tr>
                         </tbody>

@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreStudentRequest;
+use App\Http\Requests\UpdateStatusRequest;
 use App\Http\Requests\UpdateStudentRequest;
 use App\Models\Course;
 use App\Models\Student;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
@@ -24,7 +24,7 @@ class StudentController extends Controller
 
         if ($request->course_id) {
             $query = Student::query()
-            ->with('course');
+                ->with('course');
 
             if ($request->enrollment_type !== null) {
                 $query->where('enrollment_type', $request->enrollment_type);
@@ -35,15 +35,7 @@ class StudentController extends Controller
             }
 
             if($request->search != null) {
-                $query->whereAny([
-                    'last_name',
-                    'first_name',
-                ], 'LIKE', '%'.$request->search.'%');
-            }
-
-            if ($request->course_id !== null) {
-                $query->where('course_id', $request->course_id);
-                $query->orderBy('seq_no');
+                $query->whereAny(['last_name', 'first_name'], 'LIKE', '%'.$request->search.'%');
             }
 
             if ($request->school_year !== null) {
@@ -52,6 +44,11 @@ class StudentController extends Controller
 
             if($request->status !== null) {
                 $query->where('enrollment_status', $request->status);
+            }
+
+            if ($request->course_id !== null) {
+                $query->where('course_id', $request->course_id);
+                $query->orderBy('seq_no');
             }
 
             $students = $query->get();
@@ -80,8 +77,9 @@ class StudentController extends Controller
     public function create()
     {
         $graduationYears = [];
-        $startYear = 2023;
+        $startYear = 2020;
         $currentYear = date('Y');
+
         for ($year = $startYear; $year <= $currentYear; $year++) {
             $graduationYears[] = $year.'/'.($year + 1);
         }
@@ -124,10 +122,13 @@ class StudentController extends Controller
             ->orderBy('name')
             ->get();
 
-        $graduationYears = Student::query()
-            ->select('enrollment_year')
-            ->groupBy('enrollment_year')
-            ->pluck('enrollment_year');
+        $graduationYears = [];
+        $startYear = 2020;
+        $currentYear = date('Y');
+
+        for ($year = $startYear; $year <= $currentYear; $year++) {
+            $graduationYears[] = $year.'/'.($year + 1);
+        }
 
         return  Inertia::render('Students/Edit', [
             'student' => $student,
@@ -151,7 +152,9 @@ class StudentController extends Controller
      */
     public function destroy(Student $student)
     {
-        //
+        $student->delete();
+
+        return redirect()->back();
     }
 
     public function resetPassword(Student $student)
@@ -163,5 +166,17 @@ class StudentController extends Controller
         ]);
 
         return redirect()->route('students.index');
+    }
+
+    public function updateStatus(UpdateStatusRequest $request)
+    {
+        Student::query()
+            ->whereIn('id', $request->student_ids)
+            ->update([
+                'first_sem_status' => $request->first_sem_status === 'passed' ? true : false,
+                'second_sem_status' => $request->second_sem_status === 'passed' ? true : false,
+            ]);
+
+        return redirect()->back();
     }
 }
