@@ -31,7 +31,7 @@ const form = useForm({
     ext_name: '',
 });
 
-const updateAdmin = () => {
+function updateAdmin () {
     form.post(route('admin.update'), {
         preserveScroll: true,
         onSuccess: () => {

@@ -1,72 +1,15 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { Head, useForm } from "@inertiajs/vue3";
-import { ref } from "vue";
+import { Head } from "@inertiajs/vue3";
 
 const props = defineProps({
     courses: {
         type: Array,
         default: [],
     },
-    students: {
-        type: Array,
-        default: [],
-    },
-    graduationYears: {
-        type: Array,
-        default: [],
-    },
 });
 
-const downloadCertificateForm = useForm({
-    student_ids: [],
-    certificate_date: null,
-});
 
-const downloadCertificate = () => {
-    if (downloadCertificateForm.student_ids.length === 0) {
-        alert("Please select students to download certificate.");
-        return;
-    }
-
-    certificateModal.value = true;
-};
-const certificateModal = ref(false);
-const toggleSelectAll = ref(false);
-const downloadCertificateSubmit = async () => {
-    try {
-        const response = await axios.post(
-            route("certificates.download"),
-            downloadCertificateForm.data(),
-            {
-                responseType: "blob", // Important for file download
-            }
-        );
-
-        const url = window.URL.createObjectURL(new Blob([response.data]));
-        const link = document.createElement("a");
-        link.href = url;
-        link.setAttribute("download", "certificates.zip"); // Specify the download filename
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-
-        downloadCertificateForm.reset();
-        certificateModal.value = false;
-    } catch (error) {
-        console.error("Error downloading certificates:", error);
-    }
-};
-const selectAll = () => {
-    if (toggleSelectAll.value) {
-        downloadCertificateForm.student_ids = [];
-    } else {
-        downloadCertificateForm.student_ids = props.students.map(
-            (student) => student.id
-        );
-    }
-    toggleSelectAll.value = !toggleSelectAll.value;
-};
 </script>
 
 <template>
@@ -90,29 +33,6 @@ const selectAll = () => {
                             >Add Course</a
                         >
                     </div>
-                    <div class="p-2">
-                        <form method="GET" action="">
-                            <div class="mb-4">
-                                <label for="search" value="Search" />
-                                <input
-                                    id="search"
-                                    class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full"
-                                    type="text"
-                                    name="search"
-                                    placeholder="Search"
-                                    value=""
-                                />
-                            </div>
-
-                            <button
-                                type="submit"
-                                class="py-2 px-4 bg-blue-500 text-white rounded"
-                            >
-                                Filter
-                            </button>
-                        </form>
-                    </div>
-
 
                     <table class="w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">

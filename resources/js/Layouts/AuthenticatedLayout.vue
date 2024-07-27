@@ -8,6 +8,7 @@ import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
 import { Link } from "@inertiajs/vue3";
 
 const showingNavigationDropdown = ref(false);
+
 </script>
 
 <template>
@@ -20,7 +21,7 @@ const showingNavigationDropdown = ref(false);
                         <div class="flex">
                             <!-- Logo -->
                             <div class="shrink-0 flex items-center">
-                                <Link :href="route('dashboard')">
+                                <Link :href="$page.props.auth.user.role == 'Admin' ? route('dashboard') : route('certificate')">
                                     <ApplicationLogo
                                         class="max-h-11 block fill-current text-gray-800"
                                     />
@@ -50,6 +51,18 @@ const showingNavigationDropdown = ref(false);
                                 >
                                     Courses
                                 </NavLink>
+                            </div>
+                            <div
+                                class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex"
+                                v-else
+                            >
+                                <NavLink
+                                    :href="route('certificate')"
+                                    :active="route().current('certificate')"
+                                >
+                                    Certificate
+                                </NavLink>
+
                             </div>
                         </div>
 

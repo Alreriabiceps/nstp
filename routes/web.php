@@ -32,7 +32,7 @@ Route::middleware('auth')->group(function () {
         Route::post('students/import-enrolled', [UploadStudentController::class, 'importEnrolled'])->name('students.import-enrolled');
         Route::post('students/import-graduates', [UploadStudentController::class, 'importGraduates'])->name('students.import-graduates');
 
-        Route::post('students-update-status', [StudentController::class, 'updateStatus'])->name('students-update-status');
+        Route::post('students/update-status', [StudentController::class, 'updateStatus'])->name('students-update-status');
 
         Route::get('students/upload', [UploadStudentController::class, 'create'])->name('students.upload');
         Route::get('students/{student}/reset-password', [StudentController::class, 'resetPassword'])->name('students.reset-password');

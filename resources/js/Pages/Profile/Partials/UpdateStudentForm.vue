@@ -76,15 +76,15 @@ onMounted(() => {
             </p>
         </header>
 
-        <form @submit.prevent="updateStudent" class="mt-6 space-y-6" method="POST">
+        <form @submit.prevent="updateStudent" class="mt-6 space-y-6" method="POST" multiple>
             <div>
                 <InputLabel for="image" value="Image" />
-                <TextInput
-                    id="image"
+                <input id="image"
+                    ref="imageInput"
                     type="file"
                     class="mt-1 block w-full"
                     @input="form.image = $event.target.files[0]"
-                />
+                    required>
 
                 <InputError :message="form.errors.image" class="mt-2" />
             </div>

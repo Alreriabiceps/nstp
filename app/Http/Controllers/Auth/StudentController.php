@@ -40,18 +40,21 @@ class StudentController extends Controller
      */
     public function update(ProfileRequest $request): RedirectResponse
     {
+        if ($request->hasFile('image') && $request->file('image')->isValid()) {
+            $studentId = $request->user()->student_id;
+            $extension = $request->file('image')->extension();
+            $path = 'student-images/profile-image' . $studentId . '.' . $extension;
+            $imagePath = $request->file('image')->storeAs('public', $path);
+        }
+
         $request->user()->update([
             'password' => Hash::make($request['password']),
             'first_login' => false,
             'password_change_required' => false,
         ]);
 
-        if ($request->hasFile('image') && $request->file('image')->isValid()) {
-            $imagePath = $request->file('image')->store('student-images', 'public');
-        }
-
         $request->user()->student()->update([
-            'image' => $imagePath ?? null,
+            'image' => $imagePath,
             'student_id' => $request['student_id'],
             'section' => $request['section'],
         ]);

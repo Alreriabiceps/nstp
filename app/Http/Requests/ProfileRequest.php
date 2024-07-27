@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 
 class ProfileRequest extends FormRequest
@@ -15,7 +14,7 @@ class ProfileRequest extends FormRequest
             'student_id' => ['required', 'string', 'max:255', "digits:11"],
             'section' => ['required', 'string', 'max:255'],
             'current_password' => ['required', 'current_password'],
-            'password' => ['required', Password::defaults(), 'confirmed', 'min_digits:8'],
+            'password' => ['required', Password::defaults(), 'confirmed', Password::min(8)],
         ];
     }
 
