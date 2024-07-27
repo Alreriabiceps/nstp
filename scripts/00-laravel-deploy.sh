@@ -18,6 +18,11 @@ chmod -R 775 /var/www/html/bootstrap/cache
 chown -R www-data:www-data /var/www/html/storage
 chown -R www-data:www-data /var/www/html/bootstrap/cache
 
+echo "Installing npm dependencies..."
+npm install
+
+echo "Building frontend assets..."
+npm run build
 
 echo "Running seeders..."
 php artisan db:seed --force
