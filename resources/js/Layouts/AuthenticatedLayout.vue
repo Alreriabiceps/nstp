@@ -220,9 +220,17 @@ const showingNavigationDropdown = ref(false);
             </header>
 
             <!-- Page Content -->
-            <main>
+            <main class="relative mb-5">
                 <slot />
             </main>
+            <!-- Footer -->
+            <footer class="fixed bottom-0 w-full bg-gray-200 py-4">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center text-gray-500">
+                        Nstp Web-based Profile Management System 2024. &copy; All rights reserved.
+                    </div>
+                </div>
+            </footer>
         </div>
     </div>
 </template>

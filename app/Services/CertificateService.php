@@ -57,14 +57,17 @@ class CertificateService
         }
 
         $studentNameWidth = $pdf->GetStringWidth($studentName, '', 'Times', 36);
-        $startXName = (($pageWidth  - $studentNameWidth) / 2) - 24;
+
 
         $serialNumber = $student->nstp_serial_no;
 
         // Add student name
         $pdf->SetFont('Times', '', 36);
+
+        $startXName = (($pageWidth  - $studentNameWidth) / 2) + 10;
         $pdf->SetXY($startXName, 82);
-        $pdf->Write(0, $studentName);
+        $pdf->Cell($studentNameWidth, 10, $studentName, 0, 1, 'C');
+
 
         // Add academic year
         $pdf->SetFont('Times', '', 12);
