@@ -107,6 +107,12 @@ const searchForm = useForm({
 
 const submitSearch = () => {
     searchForm.get(route("students.index"), {
+        onStart: () => {
+            searchForm.processing = true;
+        },
+        onFinish: () => {
+            searchForm.processing = false;
+        },
         preserveState: true,
         preserveScroll: true,
     });
@@ -206,29 +212,6 @@ const statusUpdate = () => {
                                         </option>
                                     </select>
                                 </div>
-                                <div class="w-1/3">
-                                    <InputLabel
-                                        for="semester"
-                                        value="Semester"
-                                    />
-                                    <select
-                                        id="semester"
-                                        class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full"
-                                        name="semester"
-                                        value=""
-                                        v-model="searchForm.semester"
-                                    >
-                                        <option value="" hidden>
-                                            Please Select Semester
-                                        </option>
-                                        <option value="first">
-                                            First Semester
-                                        </option>
-                                        <option value="second">
-                                            Second Semester
-                                        </option>
-                                    </select>
-                                </div>
                             </div>
                             <div class="flex mb-4 space-x-4">
                                 <div class="w-1/3">
@@ -255,26 +238,6 @@ const statusUpdate = () => {
                                         </option>
                                     </select>
                                 </div>
-                                <div class="w-1/3">
-                                    <InputLabel for="status" value="Status" />
-                                    <select
-                                        id="status"
-                                        class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full"
-                                        name="status"
-                                        value=""
-                                        v-model="searchForm.status"
-                                    >
-                                        <option value="" hidden>
-                                            Please Select Status
-                                        </option>
-                                        <option value="complete">
-                                            Complete
-                                        </option>
-                                        <option value="incomplete">
-                                            Incomplete
-                                        </option>
-                                    </select>
-                                </div>
                             </div>
                             <button
                                 type="submit"
@@ -283,6 +246,7 @@ const statusUpdate = () => {
                                 Filter
                                 <FilterIcon class="h-4 w-4" />
                             </button>
+
                         </form>
                     </div>
 
@@ -462,7 +426,7 @@ const statusUpdate = () => {
                         <div class="fixed inset-0 bg-black opacity-50"></div>
                     </div>
 
-                    <table class="w-full divide-y divide-gray-200">
+                    <table v-if="!searchForm.processing" class="w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
                                 <th
@@ -504,12 +468,6 @@ const statusUpdate = () => {
                                     class="px-6 py-2 text-left text-sm font-medium text-gray-500 uppercase tracking-wider"
                                 >
                                     School Year
-                                </th>
-                                <th
-                                    scope="col"
-                                    class="px-6 py-2 text-left text-sm font-medium text-gray-500 uppercase tracking-wider"
-                                >
-                                    Status
                                 </th>
                                 <th
                                     scope="col"
@@ -560,20 +518,6 @@ const statusUpdate = () => {
                                 <td class="px-2 py-1 whitespace-nowrap text-xs">
                                     {{ student.enrollment_year }}
                                 </td>
-                                <td class="px-2 py-1 whitespace-nowrap text-xs">
-                                    <div
-                                        v-if="
-                                            student.first_sem_status &&
-                                            student.second_sem_status
-                                        "
-                                        class="text-green-500"
-                                    >
-                                        Complete
-                                    </div>
-                                    <div v-else class="text-red-500">
-                                        Incomplete
-                                    </div>
-                                </td>
                                 <td
                                     class="px-2 py-1 whitespace-nowrap text-sm space-x-2"
                                 >
@@ -600,6 +544,7 @@ const statusUpdate = () => {
                             </tr>
                         </tbody>
                     </table>
+                    <p v-if="searchForm.processing" class="my-4 text-center text-xl">Please wait...</p>
                 </div>
             </div>
         </div>

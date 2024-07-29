@@ -58,11 +58,13 @@ class StudentController extends Controller
             ->orderBy('name')
             ->get();
 
+        $graduationYears = [];
+        $startYear = 2020;
+        $currentYear = date('Y');
 
-        $graduationYears = Student::query()
-            ->select('enrollment_year')
-            ->groupBy('enrollment_year')
-            ->pluck('enrollment_year');
+        for ($year = $startYear; $year <= $currentYear; $year++) {
+            $graduationYears[] = $year.'-'.($year + 1);
+        }
 
         return Inertia::render('Students/Index', [
             'students' => $students,
@@ -127,7 +129,7 @@ class StudentController extends Controller
         $currentYear = date('Y');
 
         for ($year = $startYear; $year <= $currentYear; $year++) {
-            $graduationYears[] = $year.'/'.($year + 1);
+            $graduationYears[] = $year.'-'.($year + 1);
         }
 
         return  Inertia::render('Students/Edit', [

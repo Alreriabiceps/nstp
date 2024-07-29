@@ -25,7 +25,6 @@ const form = useForm({
     extension_name: null,
     email: null,
     phone: null,
-    birthdate: null,
     sex: null,
     region: "Central Luzon",
     province: "Pampanga",
@@ -222,7 +221,7 @@ const submit = () => {
                                         :message="form.errors.sex"
                                     />
                                 </div>
-                                <div class="w-full md:w-1/6 px-3 mb-4 md:mb-0">
+                                <!-- <div class="w-full md:w-1/6 px-3 mb-4 md:mb-0">
                                     <InputLabel
                                         for="birthdate"
                                         value="Birthdate"
@@ -239,7 +238,7 @@ const submit = () => {
                                         class="mt-2"
                                         :message="form.errors.birthdate"
                                     />
-                                </div>
+                                </div> -->
                             </div>
                             <div class="flex flex-wrap -mx-3 mb-6">
                                 <div class="w-full md:w-1/2 px-3 mb-4 md:mb-0">

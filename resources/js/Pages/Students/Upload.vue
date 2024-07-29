@@ -3,8 +3,6 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head, useForm } from "@inertiajs/vue3";
 import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
-import PrimaryButton from "@/Components/Buttons/PrimaryButton.vue";
-import TextInput from "@/Components/TextInput.vue";
 
 const enrolledForm = useForm({
     enrolled_file: null,
@@ -25,11 +23,11 @@ function uploadEnrolled() {
             enrolledForm.processing = false;
         },
         onSuccess: () => {
-            // Show success message
             alert("Upload successful!");
         },
     });
 }
+
 function uploadGraduates() {
     graduatesForm.post(route("students.import-graduates"), {
         onStart: () => {
@@ -39,7 +37,6 @@ function uploadGraduates() {
             graduatesForm.processing = false;
         },
         onSuccess: () => {
-            // Show success message
             alert("Upload successful!");
         },
     });
@@ -72,19 +69,14 @@ function uploadGraduates() {
                                         id="enrolled_file"
                                         class="mt-1 block w-full"
                                         name="enrolled_file"
-                                        @input="
-                                            enrolledForm.enrolled_file =
-                                                $event.target.files[0]
-                                        "
+                                        @input="enrolledForm.enrolled_file = $event.target.files[0]"
                                         required
                                         autofocus
                                     >
                                     <p v-if="enrolledForm.processing" class="mt-2 ">Please wait...</p>
                                     <InputError
                                         class="mt-2"
-                                        :message="
-                                            enrolledForm.errors.enrolled_file
-                                        "
+                                        :message="enrolledForm.errors.enrolled_file"
                                     />
                                 </div>
                             </div>
@@ -111,19 +103,14 @@ function uploadGraduates() {
                                         id="graduates_file"
                                         class="mt-1 block w-full"
                                         name="graduates_file"
-                                        @input="
-                                            enrolledForm.graduates_file =
-                                                $event.target.files[0]
-                                        "
+                                        @input="graduatesForm.graduates_file = $event.target.files[0]"
                                         required
                                         autofocus
                                     >
                                     <p v-if="graduatesForm.processing" class="mt-2 ">Please wait...</p>
                                     <InputError
                                         class="mt-2"
-                                        :message="
-                                            graduatesForm.errors.graduates_file
-                                        "
+                                        :message="graduatesForm.errors.graduates_file"
                                     />
                                 </div>
                             </div>

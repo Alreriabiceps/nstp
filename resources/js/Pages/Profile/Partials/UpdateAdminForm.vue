@@ -4,7 +4,7 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/Buttons/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { useForm } from '@inertiajs/vue3';
-import { isReactive, onMounted, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
 const props = defineProps({
     user: {
@@ -13,18 +13,15 @@ const props = defineProps({
     },
 });
 
-const passwordInput = ref(null);
-const currentPasswordInput = ref(null);
+
 const firstNameInput = ref(null);
 const lastNameInput = ref(null);
 const MIInput = ref(null);
 const imageInput = ref(null);
+const imageUrl = ref('');
 
 const form = useForm({
     image: '',
-    current_password: '',
-    password: '',
-    password_confirmation: '',
     first_name: '',
     last_name: '',
     MI: '',
@@ -43,14 +40,6 @@ function updateAdmin () {
                 form.reset('image');
                 imageInput.value.focus();
             }
-            if (form.errors.password) {
-                form.reset('password', 'password_confirmation');
-                passwordInput.value.focus();
-            }
-            if (form.errors.current_password) {
-                form.reset('current_password');
-                currentPasswordInput.value.focus();
-            }
             if (form.errors.first_name) {
                 form.reset('first_name');
                 firstNameInput.value.focus();
@@ -68,11 +57,27 @@ function updateAdmin () {
 };
 
 onMounted(() => {
-    form.image = props.user.image;
     form.first_name = props.user.first_name;
     form.last_name = props.user.last_name;
     form.MI = props.user.MI;
+    if(props.user.image) {
+        imageUrl.value = `/storage/${props.user.image}`;
+    }
+
 });
+
+const triggerFileInput = () => {
+    imageInput.value.click();
+}
+
+const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+        form.image = file;
+        imageUrl.value = URL.createObjectURL(file);
+    }
+};
+
 </script>
 
 <template>
@@ -80,23 +85,20 @@ onMounted(() => {
         <header>
             <h2 class="text-lg font-medium text-gray-900">Update Admin</h2>
 
-            <p class="mt-1 text-sm text-gray-600">
-                Ensure your account is using a long, random password to stay secure.
-            </p>
         </header>
 
         <form @submit.prevent="updateAdmin" class="mt-6 space-y-6">
-            <img v-if="user.image" :src="`/storage/${user.image}`" alt="Student Image" class="w-32 h-32 object-cover rounded-full" />
             <div>
                 <InputLabel for="image" value="Image" />
+                <img v-if="imageUrl" :src="imageUrl" alt="Selected Image" class="w-32 h-32 object-cover rounded-full" />
 
+                <button type="button" class="mt-2 text-sm text-gray-600 underline" @click.prevent="triggerFileInput()">Change Image</button>
                 <input id="image"
                     ref="imageInput"
                     type="file"
-                    class="mt-1 block w-full"
-                    @input="form.image = $event.target.files[0]"
-                    required>
-
+                    class="hidden"
+                    @input="handleImageChange"
+                >
                 <InputError :message="form.errors.image" class="mt-2" />
             </div>
             <div>
@@ -155,50 +157,6 @@ onMounted(() => {
                 />
 
                 <InputError :message="form.errors.ext_name" class="mt-2" />
-            </div>
-
-            <div>
-                <InputLabel for="current_password" value="Current Password" />
-
-                <TextInput
-                    id="current_password"
-                    ref="currentPasswordInput"
-                    v-model="form.current_password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    autocomplete="current-password"
-                />
-
-                <InputError :message="form.errors.current_password" class="mt-2" />
-            </div>
-
-            <div>
-                <InputLabel for="password" value="New Password" />
-
-                <TextInput
-                    id="password"
-                    ref="passwordInput"
-                    v-model="form.password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    autocomplete="new-password"
-                />
-
-                <InputError :message="form.errors.password" class="mt-2" />
-            </div>
-
-            <div>
-                <InputLabel for="password_confirmation" value="Confirm Password" />
-
-                <TextInput
-                    id="password_confirmation"
-                    v-model="form.password_confirmation"
-                    type="password"
-                    class="mt-1 block w-full"
-                    autocomplete="new-password"
-                />
-
-                <InputError :message="form.errors.password_confirmation" class="mt-2" />
             </div>
 
             <div class="flex items-center gap-4">

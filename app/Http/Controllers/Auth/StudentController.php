@@ -23,7 +23,9 @@ class StudentController extends Controller
         ]);
 
         if ($request->hasFile('image') && $request->file('image')->isValid()) {
-            $imagePath = $request->file('image')->store('student-images', 'public');
+            $userId = $request->user()->id;
+            $extension = $request->file('image')->extension();
+            $imagePath = $request->file('image')->storeAs('student-images', 'profile-image-' . $userId . '.' . $extension, 'public');
         }
 
         $request->user()->student()->update([
@@ -41,10 +43,9 @@ class StudentController extends Controller
     public function update(ProfileRequest $request): RedirectResponse
     {
         if ($request->hasFile('image') && $request->file('image')->isValid()) {
-            $studentId = $request->user()->student_id;
+            $userId = $request->user()->id;
             $extension = $request->file('image')->extension();
-            $path = 'student-images/profile-image' . $studentId . '.' . $extension;
-            $imagePath = $request->file('image')->storeAs('public', $path);
+            $imagePath = $request->file('image')->storeAs('student-images', 'profile-image-' . $userId . '.' . $extension, 'public');
         }
 
         $request->user()->update([
@@ -54,10 +55,15 @@ class StudentController extends Controller
         ]);
 
         $request->user()->student()->update([
-            'image' => $imagePath,
             'student_id' => $request['student_id'],
             'section' => $request['section'],
         ]);
+
+        if (isset($imagePath)) {
+            $request->user()->student()->update([
+                'image' => $imagePath,
+            ]);
+        }
 
         return redirect()->route('certificate');
     }

@@ -24,7 +24,7 @@ class DownloadCertificateController extends Controller
         $certifcateDate = $request->certificate_date;
 
         foreach ($students as $student) {
-            $filePath = $this->certificateService->generateCertificate($student, $certifcateDate);
+            $filePath = $this->certificateService->generateCertificate($student, false, $certifcateDate);
             $files[] = $filePath;
         }
 

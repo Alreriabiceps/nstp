@@ -17,7 +17,6 @@ class StoreStudentRequest extends FormRequest
             'extension_name' => 'nullable|string|max_digits:16',
 
             'sex' => 'required|string',
-            'birthdate' => 'required',
 
             'email' => 'required|email|max_digits:64',
             'phone' => 'required|string|max_digits:11',

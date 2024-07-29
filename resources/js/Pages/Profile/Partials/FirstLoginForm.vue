@@ -4,7 +4,7 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/Buttons/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { useForm } from '@inertiajs/vue3';
-import { onMounted, ref } from 'vue';
+import { ref } from 'vue';
 
 const passwordInput = ref(null);
 const currentPasswordInput = ref(null);

@@ -30,7 +30,6 @@ const form = useForm({
     extension_name: "",
     email: "",
     phone: "",
-    birthdate: "",
     sex: "",
     region: "Central Luzon",
     province: "Pampanga",
@@ -45,7 +44,7 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.post(route("students.update", props.student.id), {
+    form.put(route("students.update", props.student.id), {
         onStart: () => {
             form.processing = true;
         },
@@ -53,7 +52,6 @@ const submit = () => {
             form.processing = false;
         },
         onSuccess: () => {
-            // Show success message
             alert("Student updated successfully!");
         },
     });
@@ -79,7 +77,6 @@ onMounted(() => {
     form.extension_name = props.student.extension_name;
     form.email = props.student.email;
     form.phone = props.student.phone;
-    form.birthdate = props.student.birthdate;
     form.sex = props.student.sex;
     form.region = props.student.region;
     form.province = props.student.province;
@@ -160,8 +157,6 @@ onMounted(() => {
                                         type="text"
                                         class="mt-1 block w-full"
                                         v-model="form.extension_name"
-                                        required
-                                        autofocus
                                         placeholder="Ext Name"
                                     />
                                     <InputError
@@ -262,7 +257,7 @@ onMounted(() => {
                                         :message="form.errors.sex"
                                     />
                                 </div>
-                                <div class="w-full md:w-1/6 px-3 mb-4 md:mb-0">
+                                <!-- <div class="w-full md:w-1/6 px-3 mb-4 md:mb-0">
                                     <InputLabel
                                         for="birthdate"
                                         value="Birthdate"
@@ -279,7 +274,7 @@ onMounted(() => {
                                         class="mt-2"
                                         :message="form.errors.birthdate"
                                     />
-                                </div>
+                                </div> -->
                             </div>
                             <div class="flex flex-wrap -mx-3 mb-6">
                                 <div class="w-full md:w-1/2 px-3 mb-4 md:mb-0">

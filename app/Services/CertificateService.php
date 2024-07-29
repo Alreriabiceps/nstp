@@ -10,7 +10,7 @@ use setasign\Fpdi\Tcpdf\Fpdi;
 
 class CertificateService
 {
-    public function generateCertificate(Student $student, $date =  null)
+    public function generateCertificate(Student $student, $studentViewing = false, $date =  null)
     {
         $studentName = $student->first_name. ' '. $student->middle_name. ' ' . $student->last_name .' '. $student->extension_name;
 
@@ -18,14 +18,20 @@ class CertificateService
         $user = User::where('id', 1)->first();
         $coordinatorName = Str::upper($user->first_name. ' '. $user->MI. '. ' . $user->last_name .' '. $user->extension_name);
 
-        $date = Carbon::parse($date)->format('Y-m-d');
-        $monthYear = Carbon::createFromFormat('Y-m-d', $date)->format('F Y');
-        $day = Carbon::createFromFormat('Y-m-d', $date)->format('jS');
-        $certificateDate = "Given on the ".$day. " of ".$monthYear;
+        if ($date) {
+            $date = Carbon::parse($date)->format('Y-m-d');
+            $monthYear = Carbon::createFromFormat('Y-m-d', $date)->format('F Y');
+            $day = Carbon::createFromFormat('Y-m-d', $date)->format('jS');
+            $certificateDate = "Given on the ".$day. " of ".$monthYear;
+        }
 
         $templatePath = public_path('template-certificate/default.pdf');
 
-        $outputPath = public_path('temporary-certificate/' . $student->id . '-nstp-certificate.pdf');
+        if ($studentViewing) {
+            $outputPath = public_path('temporary-student-certificate/' . $student->id . '-nstp-certificate.pdf');
+        } else {
+            $outputPath = public_path('temporary-certificate/' . $student->id . '-nstp-certificate.pdf');
+        }
 
         $pdf = new Fpdi();
 
@@ -45,13 +51,13 @@ class CertificateService
         $academicYearWidth = $pdf->GetStringWidth($academicYear, '', 'Times', 12);
         $startAcademicYearName = (($pageWidth  - $academicYearWidth) / 2) + 9;
 
-        $certificateDateWidth = $pdf->GetStringWidth($certificateDate, '', 'Times', 12);
-        $startCertificateDate = (($pageWidth  - $certificateDateWidth) / 2) + 8;
+        if ($date) {
+            $certificateDateWidth = $pdf->GetStringWidth($certificateDate, '', 'Times', 12);
+            $startCertificateDate = (($pageWidth  - $certificateDateWidth) / 2) + 9;
+        }
 
         $studentNameWidth = $pdf->GetStringWidth($studentName, '', 'Times', 36);
         $startXName = (($pageWidth  - $studentNameWidth) / 2) - 24;
-
-        $coordinatorNameWidth = $pdf->GetStringWidth($studentName, '', 'Times', 14);
 
         $serialNumber = $student->nstp_serial_no;
 
@@ -65,10 +71,12 @@ class CertificateService
         $pdf->SetXY($startAcademicYearName, 125);
         $pdf->Write(0, $academicYear);
 
-        // Add certificate date
-        $pdf->SetFont('Times', '', 12);
-        $pdf->SetXY($startCertificateDate, 138);
-        $pdf->Write(0, $certificateDate);
+        if ($date) {
+            // Add certificate date
+            $pdf->SetFont('Times', '', 12);
+            $pdf->SetXY($startCertificateDate, 138);
+            $pdf->Write(0, $certificateDate);
+        }
 
         // Add coordinator name
         $pdf->SetFont('Times', 'B', 12);
