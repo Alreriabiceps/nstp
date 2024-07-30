@@ -260,13 +260,6 @@ const statusUpdate = () => {
                         </button>
                         <a
                             href="#"
-                            @click="updateStatus"
-                            id="updateStatusButton"
-                            class="py-2 px-2 bg-pink-500 hover:bg-pink-700 text-white rounded text-sm"
-                            >Update Status</a
-                        >
-                        <a
-                            href="#"
                             @click="downloadCertificate"
                             id="downloadCertificateButton"
                             class="py-2 px-2 bg-indigo-500 hover:bg-indigo-700 text-white rounded text-sm"
