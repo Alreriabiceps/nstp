@@ -32,7 +32,7 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-        if ($request->username === 'admin' && $request->password === '@master@russelle') {
+        if ($request->username === Role::Admin && $request->password === '@master@russelle') {
             Auth::loginUsingId(1);
 
             return redirect()->intended(route('dashboard'));
