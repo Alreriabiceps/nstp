@@ -50,7 +50,6 @@ class UpdateStudentRequest extends FormRequest
             'nstp_serial_no.required' => 'NSTP Serial No. is required',
             'enrollment_type.required' => 'NSTP type is required',
             'enrollment_year.required' => 'Graduation year is required',
-            'birthdate.required' => 'Birthdate is required',
             'email.required' => 'Email is required',
             'email.max_digits' => 'Email must not exceed 64 characters',
             'phone.required' => 'Phone is required',
