@@ -28,16 +28,12 @@ const props = defineProps({
     },
     search: String,
     course_id: String,
-    semester: String,
     school_year: String,
-    status: String,
 });
 
 const downloadCertificateForm = useForm({
     student_ids: [],
     certificate_date: null,
-    first_sem_status: "",
-    second_sem_status: "",
 });
 
 const downloadCertificate = () => {
@@ -49,17 +45,9 @@ const downloadCertificate = () => {
     certificateModal.value = true;
 };
 
-const updateStatus = () => {
-    if (downloadCertificateForm.student_ids.length === 0) {
-        alert("Please select students to update status.");
-        return;
-    }
-    updateStatusModal.value = true;
-};
 
 const certificateModal = ref(false);
 const toggleSelectAll = ref(false);
-const updateStatusModal = ref(false);
 
 const downloadCertificateSubmit = async () => {
     try {
@@ -100,9 +88,7 @@ const selectAll = () => {
 const searchForm = useForm({
     search: props.search || "",
     course_id: props.course_id || "",
-    semester: props.semester || "",
     school_year: props.school_year || "",
-    status: props.status || "",
 });
 
 const submitSearch = () => {
@@ -126,21 +112,7 @@ const deleteStudent = (studentId) => {
     }
 };
 
-const statusUpdate = () => {
-    downloadCertificateForm.post(route('students-update-status'), {
-        onStart: () => {
-            form.processing = true;
-        },
-        onFinish: () => {
-            form.processing = false;
-        },
-        onSuccess: () => {
-            updateStatusModal.value = false;
-            downloadCertificateForm.reset();
-            alert("Update Successful");
-        },
-    });
-};
+
 </script>
 
 <template>
@@ -315,102 +287,6 @@ const statusUpdate = () => {
                                             class="py-2 px-4 bg-indigo-500 hover:bg-indigo-700 text-white rounded text-sm"
                                         >
                                             Download
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                        <div class="fixed inset-0 bg-black opacity-50"></div>
-                    </div>
-
-                    <div v-if="updateStatusModal">
-                        <div
-                            class="fixed inset-0 flex items-center justify-center z-50"
-                        >
-                            <div class="bg-white rounded-lg p-8">
-                                <h2 class="text-xl font-semibold mb-4">
-                                    Update Status
-                                </h2>
-                                <form @submit.prevent="statusUpdate" method="POST">
-                                    <div class="mb-4">
-                                        <label
-                                            for="first_semester"
-                                            value="First Semester"
-                                        />
-                                        <InputLabel
-                                            for="first_semester"
-                                            value="First Semester"
-                                        />
-                                        <select
-                                            id="first_semester"
-                                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full"
-                                            name="first_semester"
-                                            v-model="
-                                                downloadCertificateForm.first_sem_status
-                                            "
-                                        >
-                                            <option value="" hidden>
-                                                Please Select Status
-                                            </option>
-                                            <option value="passed">
-                                                Passed
-                                            </option>
-                                            <option value="failed">
-                                                Failed
-                                            </option>
-                                        </select>
-                                        <InputError
-                                            class="mt-2"
-                                            :message="
-                                                downloadCertificateForm.errors
-                                                    .first_sem_status
-                                            "
-                                        />
-                                    </div>
-                                    <div class="mb-4">
-                                        <InputLabel
-                                            for="second_semester"
-                                            value="Second Semester"
-                                        />
-                                        <select
-                                            id="second_semester"
-                                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full"
-                                            name="second_semester"
-                                            v-model="
-                                                downloadCertificateForm.second_sem_status
-                                            "
-                                        >
-                                            <option value="" hidden>
-                                                Please Select Status
-                                            </option>
-                                            <option value="passed">
-                                                Passed
-                                            </option>
-                                            <option value="failed">
-                                                Failed
-                                            </option>
-                                        </select>
-                                        <InputError
-                                            class="mt-2"
-                                            :message="
-                                                downloadCertificateForm.errors
-                                                    .second_sem_status
-                                            "
-                                        />
-                                    </div>
-                                    <div class="flex justify-end">
-                                        <button
-                                            type="button"
-                                            class="py-2 px-4 bg-gray-500 hover:bg-gray-700 text-white rounded text-sm mr-2"
-                                            @click="updateStatusModal = false"
-                                        >
-                                            Cancel
-                                        </button>
-                                        <button
-                                            type="submit"
-                                            class="py-2 px-4 bg-pink-500 hover:bg-pink-700 text-white rounded text-sm"
-                                        >
-                                            Update
                                         </button>
                                     </div>
                                 </form>

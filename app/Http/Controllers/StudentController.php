@@ -26,9 +26,6 @@ class StudentController extends Controller
             $query = Student::query()
                 ->with('course');
 
-            if ($request->enrollment_type !== null) {
-                $query->where('enrollment_type', $request->enrollment_type);
-            }
 
             if ($request->enrollment_year !== null) {
                 $query->where('enrollment_type', $request->enrollment_year);
@@ -42,9 +39,6 @@ class StudentController extends Controller
                 $query->where('enrollment_year', $request->school_year);
             }
 
-            if($request->status !== null) {
-                $query->where('enrollment_status', $request->status);
-            }
 
             if ($request->course_id !== null) {
                 $query->where('course_id', $request->course_id);
