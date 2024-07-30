@@ -12,7 +12,7 @@ Before you begin, make sure you have the following installed on your machine:
 3. Open your web browser and navigate to `http://localhost/phpmyadmin`.
 4. Create a new database in MySQL.
 5. Copy the program files to the `htdocs` folder in your XAMPP installation directory.
-6. Open your web browser and navigate to `http://localhost/program`.
+6. Open your web browser and navigate to `http://localhost`.
 7. You should now see the program running locally on your machine.
 
 ## Troubleshooting
