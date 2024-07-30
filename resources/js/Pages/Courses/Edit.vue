@@ -16,7 +16,7 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.post(route("courses.update"), {
+    form.put(route("courses.update", props.course.id), {
         onStart: () => {
             form.processing = true;
         },
@@ -24,7 +24,6 @@ const submit = () => {
             form.processing = false;
         },
         onSuccess: () => {
-            // Show success message
             alert("Course updated successfully!");
         },
     });
@@ -94,7 +93,7 @@ const submit = () => {
                                     :class="{ 'opacity-25': form.processing }"
                                     :disabled="form.processing"
                                 >
-                                    Create
+                                    Update
                                 </PrimaryButton>
                             </div>
                         </form>
