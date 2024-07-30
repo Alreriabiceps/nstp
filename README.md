@@ -22,6 +22,7 @@ Before you begin, make sure you have the following installed on your machine:
 ## Additional Steps
 8. Navigate to the project folder using the command line.
 9. Run `composer install` to install the required dependencies.
-10. Run `php artisan migrate` command in your project directory to migrate the database.
+10. Run `npm run install` to build the project.
 11. Run `npm run build` to build the project.
-12. Run `php artisan serve` to start the local development server.
+12. Run `php artisan migrate:fresh --seed` command in your project directory to migrate the database.
+13. Run `php artisan serve` to start the local development server.
