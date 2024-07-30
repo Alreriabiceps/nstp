@@ -11,7 +11,7 @@ class ProfileRequest extends FormRequest
     {
         return [
             'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
-            'student_id' => ['required', 'string', 'max:255', "digits:11"],
+            'student_id' => ['required', 'string', 'max:255'],
             'section' => ['required', 'string', 'max:255'],
         ];
     }
