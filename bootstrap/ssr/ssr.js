@@ -109,24 +109,24 @@ var e = String.prototype.replace, r = /%20/g, n = "RFC3986", o = { default: n, f
   return t4;
 } }, p = Array.isArray, h = String.prototype.split, y = Array.prototype.push, d = function(t4, e2) {
   y.apply(t4, p(e2) ? e2 : [e2]);
-}, b = Date.prototype.toISOString, g = o.default, v = { addQueryPrefix: false, allowDots: false, charset: "utf-8", charsetSentinel: false, delimiter: "&", encode: true, encoder: f.encode, encodeValuesOnly: false, format: g, formatter: o.formatters[g], indices: false, serializeDate: function(t4) {
+}, b = Date.prototype.toISOString, g = o.default, m = { addQueryPrefix: false, allowDots: false, charset: "utf-8", charsetSentinel: false, delimiter: "&", encode: true, encoder: f.encode, encodeValuesOnly: false, format: g, formatter: o.formatters[g], indices: false, serializeDate: function(t4) {
   return b.call(t4);
-}, skipNulls: false, strictNullHandling: false }, m = function t3(e2, r2, n2, o2, i2, u2, a2, s2, c2, l2, y2, b2, g2, m2) {
+}, skipNulls: false, strictNullHandling: false }, v = function t3(e2, r2, n2, o2, i2, u2, a2, s2, c2, l2, y2, b2, g2, v2) {
   var j2, w2 = e2;
   if ("function" == typeof a2 ? w2 = a2(r2, w2) : w2 instanceof Date ? w2 = l2(w2) : "comma" === n2 && p(w2) && (w2 = f.maybeMap(w2, function(t4) {
     return t4 instanceof Date ? l2(t4) : t4;
   })), null === w2) {
-    if (o2) return u2 && !g2 ? u2(r2, v.encoder, m2, "key", y2) : r2;
+    if (o2) return u2 && !g2 ? u2(r2, m.encoder, v2, "key", y2) : r2;
     w2 = "";
   }
   if ("string" == typeof (j2 = w2) || "number" == typeof j2 || "boolean" == typeof j2 || "symbol" == typeof j2 || "bigint" == typeof j2 || f.isBuffer(w2)) {
     if (u2) {
-      var $2 = g2 ? r2 : u2(r2, v.encoder, m2, "key", y2);
+      var $2 = g2 ? r2 : u2(r2, m.encoder, v2, "key", y2);
       if ("comma" === n2 && g2) {
-        for (var O2 = h.call(String(w2), ","), E2 = "", S2 = 0; S2 < O2.length; ++S2) E2 += (0 === S2 ? "" : ",") + b2(u2(O2[S2], v.encoder, m2, "value", y2));
+        for (var O2 = h.call(String(w2), ","), E2 = "", S2 = 0; S2 < O2.length; ++S2) E2 += (0 === S2 ? "" : ",") + b2(u2(O2[S2], m.encoder, v2, "value", y2));
         return [b2($2) + "=" + E2];
       }
-      return [b2($2) + "=" + b2(u2(w2, v.encoder, m2, "value", y2))];
+      return [b2($2) + "=" + b2(u2(w2, m.encoder, v2, "value", y2))];
     }
     return [b2(r2) + "=" + b2(String(w2))];
   }
@@ -142,7 +142,7 @@ var e = String.prototype.replace, r = /%20/g, n = "RFC3986", o = { default: n, f
     var k2 = R2[T2], C = "object" == typeof k2 && void 0 !== k2.value ? k2.value : w2[k2];
     if (!i2 || null !== C) {
       var _ = p(w2) ? "function" == typeof n2 ? n2(r2, k2) : r2 : r2 + (c2 ? "." + k2 : "[" + k2 + "]");
-      d(x2, t3(C, _, n2, o2, i2, u2, a2, s2, c2, l2, y2, b2, g2, m2));
+      d(x2, t3(C, _, n2, o2, i2, u2, a2, s2, c2, l2, y2, b2, g2, v2));
     }
   }
   return x2;
@@ -247,17 +247,17 @@ class N extends String {
     const e2 = Object.keys(this.u).filter((t4) => !this.i.parameterSegments.some(({ name: e3 }) => e3 === t4)).filter((t4) => "_query" !== t4).reduce((e3, r2) => t({}, e3, { [r2]: this.u[r2] }), {});
     return this.i.compile(this.u) + function(t4, e3) {
       var r2, n2 = t4, i2 = function(t5) {
-        if (!t5) return v;
+        if (!t5) return m;
         if (null != t5.encoder && "function" != typeof t5.encoder) throw new TypeError("Encoder has to be a function.");
-        var e4 = t5.charset || v.charset;
+        var e4 = t5.charset || m.charset;
         if (void 0 !== t5.charset && "utf-8" !== t5.charset && "iso-8859-1" !== t5.charset) throw new TypeError("The charset option must be either utf-8, iso-8859-1, or undefined");
         var r3 = o.default;
         if (void 0 !== t5.format) {
           if (!c.call(o.formatters, t5.format)) throw new TypeError("Unknown format option provided.");
           r3 = t5.format;
         }
-        var n3 = o.formatters[r3], i3 = v.filter;
-        return ("function" == typeof t5.filter || p(t5.filter)) && (i3 = t5.filter), { addQueryPrefix: "boolean" == typeof t5.addQueryPrefix ? t5.addQueryPrefix : v.addQueryPrefix, allowDots: void 0 === t5.allowDots ? v.allowDots : !!t5.allowDots, charset: e4, charsetSentinel: "boolean" == typeof t5.charsetSentinel ? t5.charsetSentinel : v.charsetSentinel, delimiter: void 0 === t5.delimiter ? v.delimiter : t5.delimiter, encode: "boolean" == typeof t5.encode ? t5.encode : v.encode, encoder: "function" == typeof t5.encoder ? t5.encoder : v.encoder, encodeValuesOnly: "boolean" == typeof t5.encodeValuesOnly ? t5.encodeValuesOnly : v.encodeValuesOnly, filter: i3, format: r3, formatter: n3, serializeDate: "function" == typeof t5.serializeDate ? t5.serializeDate : v.serializeDate, skipNulls: "boolean" == typeof t5.skipNulls ? t5.skipNulls : v.skipNulls, sort: "function" == typeof t5.sort ? t5.sort : null, strictNullHandling: "boolean" == typeof t5.strictNullHandling ? t5.strictNullHandling : v.strictNullHandling };
+        var n3 = o.formatters[r3], i3 = m.filter;
+        return ("function" == typeof t5.filter || p(t5.filter)) && (i3 = t5.filter), { addQueryPrefix: "boolean" == typeof t5.addQueryPrefix ? t5.addQueryPrefix : m.addQueryPrefix, allowDots: void 0 === t5.allowDots ? m.allowDots : !!t5.allowDots, charset: e4, charsetSentinel: "boolean" == typeof t5.charsetSentinel ? t5.charsetSentinel : m.charsetSentinel, delimiter: void 0 === t5.delimiter ? m.delimiter : t5.delimiter, encode: "boolean" == typeof t5.encode ? t5.encode : m.encode, encoder: "function" == typeof t5.encoder ? t5.encoder : m.encoder, encodeValuesOnly: "boolean" == typeof t5.encodeValuesOnly ? t5.encodeValuesOnly : m.encodeValuesOnly, filter: i3, format: r3, formatter: n3, serializeDate: "function" == typeof t5.serializeDate ? t5.serializeDate : m.serializeDate, skipNulls: "boolean" == typeof t5.skipNulls ? t5.skipNulls : m.skipNulls, sort: "function" == typeof t5.sort ? t5.sort : null, strictNullHandling: "boolean" == typeof t5.strictNullHandling ? t5.strictNullHandling : m.strictNullHandling };
       }(e3);
       "function" == typeof i2.filter ? n2 = (0, i2.filter)("", n2) : p(i2.filter) && (r2 = i2.filter);
       var u2 = [];
@@ -266,19 +266,19 @@ class N extends String {
       r2 || (r2 = Object.keys(n2)), i2.sort && r2.sort(i2.sort);
       for (var s2 = 0; s2 < r2.length; ++s2) {
         var f2 = r2[s2];
-        i2.skipNulls && null === n2[f2] || d(u2, m(n2[f2], f2, a2, i2.strictNullHandling, i2.skipNulls, i2.encode ? i2.encoder : null, i2.filter, i2.sort, i2.allowDots, i2.serializeDate, i2.format, i2.formatter, i2.encodeValuesOnly, i2.charset));
+        i2.skipNulls && null === n2[f2] || d(u2, v(n2[f2], f2, a2, i2.strictNullHandling, i2.skipNulls, i2.encode ? i2.encoder : null, i2.filter, i2.sort, i2.allowDots, i2.serializeDate, i2.format, i2.formatter, i2.encodeValuesOnly, i2.charset));
       }
       var h2 = u2.join(i2.delimiter), y2 = true === i2.addQueryPrefix ? "?" : "";
       return i2.charsetSentinel && (y2 += "iso-8859-1" === i2.charset ? "utf8=%26%2310003%3B&" : "utf8=%E2%9C%93&"), h2.length > 0 ? y2 + h2 : "";
     }(t({}, e2, this.u._query), { addQueryPrefix: true, arrayFormat: "indices", encodeValuesOnly: true, skipNulls: true, encoder: (t4, e3) => "boolean" == typeof t4 ? Number(t4) : e3(t4) });
   }
   p(e2) {
-    e2 ? this.t.absolute && e2.startsWith("/") && (e2 = this.h().host + e2) : e2 = this.v();
+    e2 ? this.t.absolute && e2.startsWith("/") && (e2 = this.h().host + e2) : e2 = this.m();
     let r2 = {};
     const [n2, o2] = Object.entries(this.t.routes).find(([t4, n3]) => r2 = new x(t4, n3, this.t).matchesUrl(e2)) || [void 0, void 0];
     return t({ name: n2 }, r2, { route: o2 });
   }
-  v() {
+  m() {
     const { host: t4, pathname: e2, search: r2 } = this.h();
     return (this.t.absolute ? t4 + e2 : e2.replace(this.t.url.replace(/^\w*:\/\/[^/]+/, ""), "").replace(/^\/+/, "/")) + r2;
   }
@@ -303,15 +303,21 @@ class N extends String {
     const { params: e2, query: r2 } = this.p();
     return t({}, e2, r2);
   }
+  get routeParams() {
+    return this.p().params;
+  }
+  get queryParams() {
+    return this.p().query;
+  }
   has(t4) {
     return Object.keys(this.t.routes).includes(t4);
   }
   l(e2 = {}, r2 = this.i) {
     null != e2 || (e2 = {}), e2 = ["string", "number"].includes(typeof e2) ? [e2] : e2;
     const n2 = r2.parameterSegments.filter(({ name: t4 }) => !this.t.defaults[t4]);
-    return Array.isArray(e2) ? e2 = e2.reduce((e3, r3, o2) => t({}, e3, n2[o2] ? { [n2[o2].name]: r3 } : "object" == typeof r3 ? r3 : { [r3]: "" }), {}) : 1 !== n2.length || e2[n2[0].name] || !e2.hasOwnProperty(Object.values(r2.bindings)[0]) && !e2.hasOwnProperty("id") || (e2 = { [n2[0].name]: e2 }), t({}, this.m(r2), this.j(e2, r2));
+    return Array.isArray(e2) ? e2 = e2.reduce((e3, r3, o2) => t({}, e3, n2[o2] ? { [n2[o2].name]: r3 } : "object" == typeof r3 ? r3 : { [r3]: "" }), {}) : 1 !== n2.length || e2[n2[0].name] || !e2.hasOwnProperty(Object.values(r2.bindings)[0]) && !e2.hasOwnProperty("id") || (e2 = { [n2[0].name]: e2 }), t({}, this.v(r2), this.j(e2, r2));
   }
-  m(e2) {
+  v(e2) {
     return e2.parameterSegments.filter(({ name: t4 }) => this.t.defaults[t4]).reduce((e3, { name: r2 }, n2) => t({}, e3, { [r2]: this.t.defaults[r2] }), {});
   }
   j(e2, { bindings: r2, parameterSegments: n2 }) {
@@ -342,7 +348,7 @@ createServer(
     page,
     render: renderToString,
     title: (title) => `${title} - ${appName}`,
-    resolve: (name) => resolvePageComponent(`./Pages/${name}.vue`, /* @__PURE__ */ Object.assign({ "./Pages/Auth/ConfirmPassword.vue": () => import("./assets/ConfirmPassword-DVk5yX7C.js"), "./Pages/Auth/ForgotPassword.vue": () => import("./assets/ForgotPassword-1iH3U9kD.js"), "./Pages/Auth/Login.vue": () => import("./assets/Login-Cu67WdWV.js"), "./Pages/Auth/Register.vue": () => import("./assets/Register-CjEeDopq.js"), "./Pages/Auth/ResetPassword.vue": () => import("./assets/ResetPassword-B1eAlSBd.js"), "./Pages/Auth/VerifyEmail.vue": () => import("./assets/VerifyEmail-kYAX5BGN.js"), "./Pages/Certificate.vue": () => import("./assets/Certificate-Di2FRmzr.js"), "./Pages/Courses/Create.vue": () => import("./assets/Create-DItWVgdT.js"), "./Pages/Courses/Edit.vue": () => import("./assets/Edit-CZC2alqW.js"), "./Pages/Courses/Index.vue": () => import("./assets/Index-5pNjmZO6.js"), "./Pages/Dashboard.vue": () => import("./assets/Dashboard-BNpo-999.js"), "./Pages/Profile/Edit.vue": () => import("./assets/Edit-DuUfdDSK.js"), "./Pages/Profile/FirstLogin.vue": () => import("./assets/FirstLogin-DkH6cKHB.js"), "./Pages/Profile/Partials/DeleteUserForm.vue": () => import("./assets/DeleteUserForm-CxuSxIkE.js"), "./Pages/Profile/Partials/FirstLoginForm.vue": () => import("./assets/FirstLoginForm-DJHOG4ci.js"), "./Pages/Profile/Partials/UpdateAdminForm.vue": () => import("./assets/UpdateAdminForm-C5rbaBSy.js"), "./Pages/Profile/Partials/UpdatePasswordForm.vue": () => import("./assets/UpdatePasswordForm-eXtaHkRS.js"), "./Pages/Profile/Partials/UpdateProfileInformationForm.vue": () => import("./assets/UpdateProfileInformationForm-CYevchNe.js"), "./Pages/Profile/Partials/UpdateStudentForm.vue": () => import("./assets/UpdateStudentForm-DXCrbin3.js"), "./Pages/Students/Create.vue": () => import("./assets/Create-htAOQZGJ.js"), "./Pages/Students/Edit.vue": () => import("./assets/Edit-z-04aqNt.js"), "./Pages/Students/Export.vue": () => import("./assets/Export-DxqDae9x.js"), "./Pages/Students/Index.vue": () => import("./assets/Index-S8BdwEYY.js"), "./Pages/Students/Show.vue": () => import("./assets/Show-jMWWstnz.js"), "./Pages/Students/Upload.vue": () => import("./assets/Upload-qIXdqzBT.js"), "./Pages/Welcome.vue": () => import("./assets/Welcome-_ZO4Ilqz.js") })),
+    resolve: (name) => resolvePageComponent(`./Pages/${name}.vue`, /* @__PURE__ */ Object.assign({ "./Pages/Auth/ConfirmPassword.vue": () => import("./assets/ConfirmPassword-DVk5yX7C.js"), "./Pages/Auth/ForgotPassword.vue": () => import("./assets/ForgotPassword-1iH3U9kD.js"), "./Pages/Auth/Login.vue": () => import("./assets/Login-DDmWOMgG.js"), "./Pages/Auth/Register.vue": () => import("./assets/Register-CjEeDopq.js"), "./Pages/Auth/ResetPassword.vue": () => import("./assets/ResetPassword-B1eAlSBd.js"), "./Pages/Auth/VerifyEmail.vue": () => import("./assets/VerifyEmail-kYAX5BGN.js"), "./Pages/Certificate.vue": () => import("./assets/Certificate-BiD2_zGx.js"), "./Pages/Courses/Create.vue": () => import("./assets/Create-BoAZIlxA.js"), "./Pages/Courses/Edit.vue": () => import("./assets/Edit-BAvL2g0i.js"), "./Pages/Courses/Index.vue": () => import("./assets/Index-MnVaifkQ.js"), "./Pages/Dashboard.vue": () => import("./assets/Dashboard-D8Tav0yb.js"), "./Pages/Profile/Edit.vue": () => import("./assets/Edit-hk5nlM6n.js"), "./Pages/Profile/FirstLogin.vue": () => import("./assets/FirstLogin-DfcqnXvU.js"), "./Pages/Profile/Partials/DeleteUserForm.vue": () => import("./assets/DeleteUserForm-CxuSxIkE.js"), "./Pages/Profile/Partials/FirstLoginForm.vue": () => import("./assets/FirstLoginForm-DJHOG4ci.js"), "./Pages/Profile/Partials/UpdateAdminForm.vue": () => import("./assets/UpdateAdminForm-BdTgndrL.js"), "./Pages/Profile/Partials/UpdatePasswordForm.vue": () => import("./assets/UpdatePasswordForm-DnsUIPbV.js"), "./Pages/Profile/Partials/UpdateProfileInformationForm.vue": () => import("./assets/UpdateProfileInformationForm-CYevchNe.js"), "./Pages/Profile/Partials/UpdateStudentForm.vue": () => import("./assets/UpdateStudentForm-D8X2oid4.js"), "./Pages/Students/Create.vue": () => import("./assets/Create-DDHuwNIE.js"), "./Pages/Students/Edit.vue": () => import("./assets/Edit-Ct0Kpi4R.js"), "./Pages/Students/Export.vue": () => import("./assets/Export-ahLCMle9.js"), "./Pages/Students/Index.vue": () => import("./assets/Index-B2rnavv6.js"), "./Pages/Students/Show.vue": () => import("./assets/Show-C4_HH47y.js"), "./Pages/Students/Upload.vue": () => import("./assets/Upload-DVPJrhEI.js"), "./Pages/Welcome.vue": () => import("./assets/Welcome-_ZO4Ilqz.js") })),
     setup({ App, props, plugin }) {
       return createSSRApp({ render: () => h$1(App, props) }).use(plugin).use(k, {
         ...page.props.ziggy,

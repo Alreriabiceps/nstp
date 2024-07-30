@@ -11,18 +11,15 @@ Before you begin, make sure you have the following installed on your machine:
 2. Open XAMPP and start the Apache and MySQL services.
 3. Open your web browser and navigate to `http://localhost/phpmyadmin`.
 4. Create a new database in MySQL.
-5. Copy the program files to the `htdocs` folder in your XAMPP installation directory.
-6. Open your web browser and navigate to `http://localhost`.
-7. You should now see the program running locally on your machine.
+5. Navigate to the project folder using the command line.
+6. Run `composer install` to install the required dependencies.
+7. Run `npm run install` to build the project.
+8. Run `npm run build` to build the project.
+9. Run `php artisan migrate:fresh --seed` command in your project directory to migrate the database.
+10. Run `php artisan serve` to start the local development server.
 
 ## Troubleshooting
 - If you encounter any issues, make sure that the Apache and MySQL services are running in XAMPP.
 - Double-check the database configuration in the program files to ensure it matches your local setup.
 
 ## Additional Steps
-8. Navigate to the project folder using the command line.
-9. Run `composer install` to install the required dependencies.
-10. Run `npm run install` to build the project.
-11. Run `npm run build` to build the project.
-12. Run `php artisan migrate:fresh --seed` command in your project directory to migrate the database.
-13. Run `php artisan serve` to start the local development server.
