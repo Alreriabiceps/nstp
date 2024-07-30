@@ -6,7 +6,7 @@ import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/Buttons/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 
-props = defineProps({
+const props = defineProps({
     course: Object,
 });
 
