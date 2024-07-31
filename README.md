@@ -22,5 +22,3 @@ Before you begin, make sure you have the following installed on your machine:
 ## Troubleshooting
 - If you encounter any issues, make sure that the Apache and MySQL services are running in XAMPP.
 - Double-check the database configuration in the program files to ensure it matches your local setup.
-
-## Additional Steps
