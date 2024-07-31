@@ -31,11 +31,14 @@ jobs:
         php-version: '8.3'
         extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, pdo_mysql, bcmath, soap, intl, gd, exif, iconv
         coverage: none
+
     # use the latest version of the composer
     - uses: actions/checkout@v4
+
     # copy the .env.example file to .env
     - name: Copy .env
       run: cp .env.example .env
+
     # set the MySQL database configuration
     - name: Set MySQL Database Configuration
       run: |
@@ -45,18 +48,31 @@ jobs:
         echo "DB_DATABASE=laravel" >> .env
         echo "DB_USERNAME=root" >> .env
         echo "DB_PASSWORD=root" >> .env
+
     # install or update the composer
     - name: Install or update composer
       run: composer install
+
     # install npm dependencies
     - name: Install npm dependencies
       run: npm install
+
     # run npm build
     - name: Run npm build
       run: npm run build
+
+    # create storage link
+    - name: Create storage link
+      run: php artisan storage:link
+
+    # create temp folder in public directory
+    - name: Create temp folder in public directory
+      run: mkdir -p public/temp
+
     # run the migrations
     - name: Run migrations
       run: php artisan migrate --force
+
     # run the Laravel Artisan commands
     - name: Optimize Laravel Artisan
       run: php artisan optimize:clear
