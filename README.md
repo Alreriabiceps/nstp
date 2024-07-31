@@ -17,7 +17,8 @@ Before you begin, make sure you have the following installed on your machine:
 8. Run `npm run install` to build the project.
 9. Run `npm run build` to build the project.
 10. Run `php artisan migrate:fresh --seed` command in your project directory to migrate the database.
-11. Run `php artisan serve` to start the local development server.
+11. Run `php artisan storage:link` command in your project
+12. Run `php artisan serve` to start the local development server.
 
 ## Troubleshooting
 - If you encounter any issues, make sure that the Apache and MySQL services are running in XAMPP.
