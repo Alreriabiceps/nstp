@@ -25,7 +25,7 @@ jobs:
           --health-retries=3
 
     steps:
-    # checkout the repository
+    # use the latest version of the PHP
     - uses: shivammathur/setup-php@v2
       with:
         php-version: '8.3'
@@ -48,6 +48,9 @@ jobs:
     # install or update the composer
     - name: Install or update composer
       run: composer install
+    # run the migrations
+    - name: Run migrations
+      run: php artisan migrate --force
     # run the Laravel Artisan commands
     - name: Optimize Laravel Artisan
       run: php artisan optimize:clear
@@ -64,9 +67,7 @@ jobs:
           echo "Waiting for database connection..."
           sleep 5
         done
-    # run the migrations
-    - name: Run migrations
-      run: php artisan migrate --force
+
     # run the tests
     - name: Execute tests (Unit and Feature tests) via PHPUnit/Pest
       run: php artisan test
