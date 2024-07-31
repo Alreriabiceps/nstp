@@ -51,7 +51,7 @@ jobs:
 
     # install or update the composer
     - name: Install or update composer
-      run: composer install
+      run: composer install -n --prefer-dist
 
     # install npm dependencies
     - name: Install npm dependencies
@@ -93,3 +93,7 @@ jobs:
     # run the tests
     - name: Execute tests (Unit and Feature tests) via PHPUnit/Pest
       run: php artisan test
+
+    # run the static analysis
+    - name: Run Static Analysis
+      run: ./vendor/bin/phpstan --error-format=github
