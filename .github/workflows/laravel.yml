@@ -48,6 +48,12 @@ jobs:
     # install or update the composer
     - name: Install or update composer
       run: composer install
+    # install npm dependencies
+    - name: Install npm dependencies
+      run: npm install
+    # run npm build
+    - name: Run npm build
+      run: npm run build
     # run the migrations
     - name: Run migrations
       run: php artisan migrate --force
