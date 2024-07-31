@@ -20,6 +20,8 @@ jobs:
       run: cp .env.example .env
     - name: Install or update composer
       run: composer update
+    - name: Optimize Laravel Artisan
+      run: php artisan optimize:clear
     - name: Generate key
       run: php artisan key:generate
     - name: Directory Permissions
@@ -31,7 +33,5 @@ jobs:
       env:
         DB_CONNECTION: sqlite
         DB_DATABASE: database/database.sqlite
-    - name: Cache Laravel Artisan
-      run: php artisan cache:clear
     - name: Execute tests (Unit and Feature tests) via PHPUnit/Pest
       run: php artisan test
