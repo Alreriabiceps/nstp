@@ -16,7 +16,7 @@ import { Head } from '@inertiajs/vue3';
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div>
-
+                        <video src="/tutorial-video/intro.mp4" controls></video>
                     </div>
                 </div>
             </div>

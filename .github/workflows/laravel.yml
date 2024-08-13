@@ -76,12 +76,15 @@ jobs:
     # run the Laravel Artisan commands
     - name: Optimize Laravel Artisan
       run: php artisan optimize:clear
+
     # generate the application key
     - name: Generate key
       run: php artisan key:generate
+
     # set the directory permissions
     - name: Directory Permissions
       run: chmod -R 777 storage bootstrap/cache
+
     # wait for the MySQL to be ready
     - name: Wait for MySQL to be ready
       run: |

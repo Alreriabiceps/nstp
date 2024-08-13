@@ -82,9 +82,9 @@ class CertificateService
         }
 
         // Add coordinator name
-        $pdf->SetFont('Times', 'B', 12);
-        $pdf->SetXY(54, 161);
-        $pdf->Write(0, $coordinatorName);
+        // $pdf->SetFont('Times', 'B', 12);
+        // $pdf->SetXY(54, 161);
+        // $pdf->Write(0, $coordinatorName);
 
         //Add serial number
         $pdf->SetFont('Times', '', 12);
