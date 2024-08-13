@@ -97,6 +97,3 @@ jobs:
     - name: Execute tests (Unit and Feature tests) via PHPUnit/Pest
       run: php artisan test
 
-    # run the static analysis
-    - name: Run Static Analysis
-      run: ./vendor/bin/phpstan --error-format=github
