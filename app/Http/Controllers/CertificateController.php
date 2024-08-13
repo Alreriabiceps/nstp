@@ -15,7 +15,7 @@ class CertificateController extends Controller
     public function index()
     {
         $student = Student::with('course')->where('user_id', auth()->id())->first();
-        $this->certificateService->generateCertificate($student, true, null);
+        $this->certificateService->generateCertificate($student, true, today());
         $certificate = '/temporary-student-certificate/'.$student->id.'-nstp-certificate.pdf';
 
         return Inertia::render('Certificate', [
