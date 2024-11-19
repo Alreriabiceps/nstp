@@ -119,7 +119,6 @@ const submit = () => {
                                         type="text"
                                         class="mt-1 block w-full"
                                         v-model="form.extension_name"
-                                        required
                                         autofocus
                                         placeholder="Ext Name"
                                     />

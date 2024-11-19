@@ -11,22 +11,22 @@ class StoreStudentRequest extends FormRequest
         return [
             'student_id' => 'required|string',
 
-            'first_name' => 'required|string|max_digits:32',
-            'last_name' => 'required|string|max_digits:32',
-            'middle_name' => 'required|string|max_digits:24',
-            'extension_name' => 'nullable|string|max_digits:16',
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
+            'middle_name' => 'required|string',
+            'extension_name' => 'nullable|string',
 
             'sex' => 'required|string',
 
-            'email' => 'required|email|max_digits:64',
-            'phone' => 'required|string|max_digits:11',
+            'email' => 'required|email',
+            'phone' => 'required|string',
 
             'course_id' => 'required|integer',
 
-            'region' => 'required|string|max:255',
-            'province' => 'required|string|max:255',
-            'city' => 'required|string|max:255',
-            'brgy' => 'required|string|max:255',
+            'region' => 'required|string5',
+            'province' => 'required|string',
+            'city' => 'required|string',
+            'brgy' => 'required|string',
 
             'enrollment_type' => 'required|string',
             'enrollment_year' => 'required|string',

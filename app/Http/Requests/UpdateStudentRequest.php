@@ -23,10 +23,10 @@ class UpdateStudentRequest extends FormRequest
 
             'course_id' => 'required|integer',
 
-            'region' => 'required|string|max:255',
-            'province' => 'required|string|max:255',
-            'city' => 'required|string|max:255',
-            'brgy' => 'required|string|max:255',
+            'region' => 'required|string',
+            'province' => 'required|string',
+            'city' => 'required|string',
+            'brgy' => 'required|string',
 
             'enrollment_type' => 'required|string',
             'enrollment_year' => 'required|string',
