@@ -6,6 +6,7 @@ use App\Models\Student;
 use App\Models\User;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\File;
 use setasign\Fpdi\Tcpdf\Fpdi;
 
 class CertificateService
@@ -27,10 +28,29 @@ class CertificateService
 
         $templatePath = public_path('template-certificate/default.pdf');
 
+        // Ensure template directory exists
+        $templateDir = public_path('template-certificate');
+        if (!File::exists($templateDir)) {
+            File::makeDirectory($templateDir, 0755, true);
+        }
+
+        // Check if template exists
+        if (!File::exists($templatePath)) {
+            throw new \Exception("Certificate template not found: {$templatePath}");
+        }
+
         if ($studentViewing) {
-            $outputPath = public_path('temporary-student-certificate/' . $student->id . '-nstp-certificate.pdf');
+            $outputDir = public_path('temporary-student-certificate');
+            if (!File::exists($outputDir)) {
+                File::makeDirectory($outputDir, 0755, true);
+            }
+            $outputPath = $outputDir . '/' . $student->id . '-nstp-certificate.pdf';
         } else {
-            $outputPath = public_path('temporary-certificate/' . $student->id . '-nstp-certificate.pdf');
+            $outputDir = public_path('temporary-certificate');
+            if (!File::exists($outputDir)) {
+                File::makeDirectory($outputDir, 0755, true);
+            }
+            $outputPath = $outputDir . '/' . $student->id . '-nstp-certificate.pdf';
         }
 
         $pdf = new Fpdi();

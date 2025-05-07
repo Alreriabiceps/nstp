@@ -9,7 +9,7 @@ class UpdateStudentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'student_id' => 'required|string',
+            'student_id' => 'nullable|string',
 
             'first_name' => 'required|string',
             'last_name' => 'required|string',
@@ -31,14 +31,13 @@ class UpdateStudentRequest extends FormRequest
             'enrollment_type' => 'required|string',
             'enrollment_year' => 'required|string',
 
-            'nstp_serial_no' => 'required|string',
+            'nstp_serial_no' => 'nullable|string',
         ];
     }
 
     public function messages()
     {
         return [
-            'student_id.required' => 'Student ID is required',
             'first_name.required' => 'First name is required',
             'first_name.max_digits' => 'First name must not exceed 32 characters',
             'last_name.required' => 'Last name is required',
@@ -47,7 +46,6 @@ class UpdateStudentRequest extends FormRequest
             'middle_name.max_digits' => 'Middle name must not exceed 24 characters',
             'extension_name.max_digits' => 'Extension name must not exceed 16 characters',
             'coures_id.required' => 'Course is required',
-            'nstp_serial_no.required' => 'NSTP Serial No. is required',
             'enrollment_type.required' => 'NSTP type is required',
             'enrollment_year.required' => 'Graduation year is required',
             'email.required' => 'Email is required',

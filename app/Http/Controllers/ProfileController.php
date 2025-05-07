@@ -49,6 +49,21 @@ class ProfileController extends Controller
     }
 
     /**
+     * Update the user's username.
+     */
+    public function updateUsername(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'username' => ['required', 'string', 'max:255', 'unique:users,username,' . $request->user()->id],
+        ]);
+
+        $request->user()->username = $request->username;
+        $request->user()->save();
+
+        return Redirect::route('profile.edit')->with('message', 'Username updated successfully.');
+    }
+
+    /**
      * Delete the user's account.
      */
     public function destroy(Request $request): RedirectResponse

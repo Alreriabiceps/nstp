@@ -21,7 +21,6 @@ class UploadStudentController extends Controller
     {
         try {
             Excel::import(new StudentsImport, $request->file('enrolled_file'));
-
             return redirect()->back()->with('success', 'Data imported successfully.');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Failed to import data: ' . $e->getMessage());

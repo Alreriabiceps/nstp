@@ -36,8 +36,8 @@ return new class extends Migration
 
             $table->string('enrollment_status')->nullable();
 
-            $table->boolean('first_sem_status')->default(false);
-            $table->boolean('second_sem_status')->default(false);
+            $table->string('first_sem_status')->default('pending');
+            $table->string('second_sem_status')->default('pending');
 
             $table->string('enrollment_year')->nullable();
             $table->string('enrollment_type')->nullable();

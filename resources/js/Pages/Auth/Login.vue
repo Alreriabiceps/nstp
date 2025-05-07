@@ -31,7 +31,7 @@ const submit = () => {
     <GuestLayout>
         <Head title="Log in" />
 
-        <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
+        <div v-if="status" class="mb-4 font-medium text-sm text-green-600 dark:text-green-400">
             {{ status }}
         </div>
         <form @submit.prevent="submit">
@@ -71,7 +71,7 @@ const submit = () => {
                         <svg
                             v-if="showPassword"
                             xmlns="http://www.w3.org/2000/svg"
-                            class="h-5 w-5 text-gray-500"
+                            class="h-5 w-5 text-gray-500 dark:text-gray-400"
                             viewBox="0 0 20 20"
                             fill="currentColor"
                         >
@@ -89,7 +89,7 @@ const submit = () => {
                         <svg
                             v-else
                             xmlns="http://www.w3.org/2000/svg"
-                            class="h-5 w-5 text-gray-500"
+                            class="h-5 w-5 text-gray-500 dark:text-gray-400"
                             viewBox="0 0 20 20"
                             fill="currentColor"
                         >
