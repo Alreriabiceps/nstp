@@ -3,11 +3,10 @@
 namespace App\Imports;
 
 use App\Imports\NstpEnrollmentSheetImport;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 
-class StudentsImport implements WithMultipleSheets, WithChunkReading, ShouldQueue
+class StudentsImport implements WithMultipleSheets, WithChunkReading
 {
     public function sheets(): array
     {

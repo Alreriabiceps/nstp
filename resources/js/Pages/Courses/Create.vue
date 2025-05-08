@@ -4,7 +4,7 @@ import { Head, useForm } from "@inertiajs/vue3";
 import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/Buttons/PrimaryButton.vue";
-import SecondaryButton from "@/Components/SecondaryButton.vue";
+import SecondaryButton from "@/Components/Buttons/SecondaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import { ref } from "vue";
 

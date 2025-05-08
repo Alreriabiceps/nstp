@@ -145,12 +145,22 @@ const searchStudents = () => {
 
     // Filter students based on search criteria
     searchResults.value = props.students.filter(student => {
-        // Only show pending students for the selected NSTP type
-        const isPending = modalType.value === 'nstp1' 
-            ? student.first_sem_status === 2 // 2=pending 
-            : student.second_sem_status === 2; // 2=pending
-            
-        if (!isPending) return false;
+        // Check if we're in the failed filter view
+        if (props.showFailedFilter) {
+            // In failed filter view, only show failed students
+            const isFailed = props.failedFilter === 'nstp1' 
+                ? student.first_sem_status === 0 // 0=failed
+                : student.second_sem_status === 0; // 0=failed
+                
+            if (!isFailed) return false;
+        } else {
+            // In normal view, only show pending students for the selected NSTP type
+            const isPending = modalType.value === 'nstp1' 
+                ? student.first_sem_status === 2 // 2=pending 
+                : student.second_sem_status === 2; // 2=pending
+                
+            if (!isPending) return false;
+        }
         
         const fullName = `${student.last_name}, ${student.first_name} ${student.middle_name}`.toLowerCase();
         const studentId = student.student_id?.toLowerCase() || '';
@@ -169,18 +179,18 @@ const searchStudents = () => {
     });
     
     // Debug information
-    console.log(`Found ${searchResults.value.length} pending students that match the criteria for ${modalType.value}`);
+    console.log(`Found ${searchResults.value.length} students that match the criteria for ${modalType.value}`);
     
-    // Update the selected IDs list to remove any students that are no longer pending
+    // Update the selected IDs list to remove any students that are no longer in the correct status
     if (modalType.value === 'nstp1') {
         nstp1FailedStudents.value = nstp1FailedStudents.value.filter(id => {
             const student = props.students.find(s => s.id === id);
-            return student && student.first_sem_status === 2;
+            return student && (props.showFailedFilter ? student.first_sem_status === 0 : student.first_sem_status === 2);
         });
     } else {
         nstp2FailedStudents.value = nstp2FailedStudents.value.filter(id => {
             const student = props.students.find(s => s.id === id);
-            return student && student.second_sem_status === 2;
+            return student && (props.showFailedFilter ? student.second_sem_status === 0 : student.second_sem_status === 2);
         });
     }
 };

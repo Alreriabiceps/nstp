@@ -225,7 +225,19 @@ const { theme } = useThemeStore();
                         <a href="https://www.linkedin.com/in/russelle-roxas-173831334/" 
                            class="text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 hover:underline"
                            target="_blank" rel="noopener noreferrer">
-                            Let's connect on LinkedIn!
+                            Russelle Roxas
+                        </a>
+                        <span class="mx-2">•</span>
+                        <a href="https://ph.linkedin.com/in/pangilinan-mariella-faye-c-617478364" 
+                           class="text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 hover:underline"
+                           target="_blank" rel="noopener noreferrer">
+                            Mariella Faye Pangilinan
+                        </a>
+                        <span class="mx-2">•</span>
+                        <a href="https://ph.linkedin.com/in/dane-paguinto-663478364" 
+                           class="text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 hover:underline"
+                           target="_blank" rel="noopener noreferrer">
+                            Denmark Paguinto
                         </a>
                     </div>
                 </div>

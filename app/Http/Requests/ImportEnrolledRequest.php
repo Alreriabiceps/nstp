@@ -9,7 +9,7 @@ class ImportEnrolledRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'enrolled_file' => 'required|mimes:xls,xlsx|max:10240',
+            'enrolled_file' => 'required|mimes:xls,xlsx,csv|max:10240',
         ];
     }
 

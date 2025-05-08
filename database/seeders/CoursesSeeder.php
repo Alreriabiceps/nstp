@@ -13,15 +13,16 @@ class CoursesSeeder extends Seeder
     public function run(): void
     {
         $courses = [
-            ['code' => 'BSMT',      'name' => 'BS Marine Transportation'],
-            ['code' => 'BSME',      'name' => 'BS Marine Engineering'],
-            ['code' => 'BSTM',      'name' => 'BS Tourism Management'],
-            ['code' => 'BSC',       'name' => 'BS Criminology'],
-            ['code' => 'BTVTED',    'name' => 'BTVTED'],
-            ['code' => 'BSIS',      'name' => 'BS Information Systems'],
-            ['code' => 'BECE',      'name' => 'BECED'],
-            ['code' => 'BSE',       'name' => 'BS Entrepreneurship'],
-            ['code' => 'BSA',       'name' => 'BS Management Accounting'],
+            ['code' => 'BSMT',      'name' => 'Bachelor of Science Marine Transportation'],
+            ['code' => 'BSME',      'name' => 'Bachelor of Science Marine Engineering'],
+            ['code' => 'BSTM',      'name' => 'Bachelor of Science Tourism Management'],
+            ['code' => 'BSC',       'name' => 'Bachelor of Science in Criminology'],
+            ['code' => 'BTVTED',    'name' => 'Bachelor of Technical-Vocational Teachers Education'],
+            ['code' => 'BSIS',      'name' => 'Bachelor of Science Information Systems'],
+            ['code' => 'BECE',      'name' => 'Bachelor of Early Childhood Education'],
+            ['code' => 'BSE',       'name' => 'Bachelor of Science Entrepreneurship'],
+            ['code' => 'BSA',       'name' => 'Bachelor of Science in Management Accounting'],
+            ['code' => 'BSN',       'name' => 'Bachelor of Science in Nursing'],
         ];
 
         foreach ($courses as $course) {

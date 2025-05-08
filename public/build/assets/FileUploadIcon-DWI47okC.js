@@ -1,0 +1,1 @@
+import{_ as e}from"./_plugin-vue_export-helper-DlAUqK2U.js";import{G as n,o as c,c as s}from"./app-D8wmBy9s.js";const t={};function a(r,_){const o=n("font-awesome-icon");return c(),s(o,{icon:"fa-solid fa-file-upload"})}const m=e(t,[["render",a]]);export{m as F};

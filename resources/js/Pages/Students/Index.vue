@@ -15,6 +15,8 @@ import { ref, watch } from "vue";
 import Pagination from "@/Components/Pagination.vue";
 import axios from "axios";
 
+const isUploading = ref(false);
+
 const props = defineProps({
     courses: {
         type: Array,
@@ -126,22 +128,19 @@ const downloadCertificateSubmit = async () => {
             return;
         }
 
-        // Show loading notification
-        const loadingNotification = document.createElement('div');
-        loadingNotification.className = 'fixed top-4 right-4 bg-blue-500 text-white px-4 py-2 rounded shadow-lg z-50';
-        loadingNotification.textContent = 'Generating certificates, please wait...';
-        document.body.appendChild(loadingNotification);
+        // Set uploading state to true
+        isUploading.value = true;
 
-        // Try multiple URL possibilities with fallbacks
+        // Try multiple URL possibilities with fallbacksng
         let response;
         let error404 = false;
         
         try {
             // First attempt with route helper
             response = await axios.post(
-            route("certificates.download"),
-            downloadCertificateForm.data(),
-            {
+                route("certificates.download"),
+                downloadCertificateForm.data(),
+                {
                     responseType: "blob",
                 }
             );
@@ -179,8 +178,8 @@ const downloadCertificateSubmit = async () => {
                                     'Content-Type': 'application/json',
                                     'Accept': 'application/json'
                                 }
-            }
-        );
+                            }
+                        );
                     } else {
                         throw err2;
                     }
@@ -189,23 +188,6 @@ const downloadCertificateSubmit = async () => {
                 throw err;
             }
         }
-
-        // Remove loading notification
-        if (document.body.contains(loadingNotification)) {
-            document.body.removeChild(loadingNotification);
-        }
-
-        // Show success notification
-        const successNotification = document.createElement('div');
-        successNotification.className = 'fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg z-50';
-        successNotification.textContent = 'Certificates generated successfully!';
-        document.body.appendChild(successNotification);
-        
-        setTimeout(() => {
-            if (document.body.contains(successNotification)) {
-                document.body.removeChild(successNotification);
-            }
-        }, 3000);
 
         // Create download link
         const blobUrl = window.URL.createObjectURL(new Blob([response.data]));
@@ -219,14 +201,22 @@ const downloadCertificateSubmit = async () => {
         // Reset form and close modal
         downloadCertificateForm.reset();
         certificateModal.value = false;
+        isUploading.value = false;
+
+        // Show success notification
+        const successNotification = document.createElement('div');
+        successNotification.className = 'fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg z-50';
+        successNotification.textContent = 'Certificates generated successfully!';
+        document.body.appendChild(successNotification);
+        
+        setTimeout(() => {
+            if (document.body.contains(successNotification)) {
+                document.body.removeChild(successNotification);
+            }
+        }, 3000);
+
     } catch (error) {
         console.error("Error downloading certificates:", error);
-        
-        // Remove any existing loading notification
-        const loadingNotification = document.querySelector('.bg-blue-500.fixed');
-        if (loadingNotification && document.body.contains(loadingNotification)) {
-            document.body.removeChild(loadingNotification);
-        }
         
         // Show error notification
         const errorNotification = document.createElement('div');
@@ -481,23 +471,63 @@ const refreshData = () => {
 
 // Student Instructions Panel functionality
 const showInstructions = ref(false);
+
+// Batch Upload Instructions Dropdown
+const showBatchUploadInstructions = ref(false);
 </script>
 
 <template>
     <Head title="Students" />
 
     <AuthenticatedLayout>
+        <div v-if="isUploading" class="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-xl flex flex-col items-center">
+                <div class="relative w-16 h-16">
+                    <svg class="w-full h-full" viewBox="0 0 100 100">
+                        <circle 
+                            class="stroke-blue-500" 
+                            cx="50" 
+                            cy="50" 
+                            r="40" 
+                            fill="none" 
+                            stroke-width="3" 
+                            stroke-dasharray="251" 
+                            stroke-dashoffset="75"
+                        >
+                            <animateTransform
+                                attributeName="transform"
+                                type="rotate"
+                                from="0 50 50"
+                                to="360 50 50"
+                                dur="1.5s"
+                                repeatCount="indefinite"
+                            />
+                        </circle>
+                    </svg>
+                </div>
+                <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mt-3">Generating Certificates</p>
+            </div>
+        </div>
+
         <template #header>
             <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                Students
-            </h2>
-                <!-- Mobile sidebar toggle -->
-                <button @click="showSidebar = !showSidebar" class="md:hidden px-3 py-1.5 border border-gray-300 dark:border-gray-600 shadow-sm text-sm font-medium rounded-md text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                </button>
+                <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+                    Students
+                </h2>
+                <div class="flex gap-2 items-center">
+                    <!-- Batch Upload Navigation Button -->
+                    <Link :href="route('students.upload')"
+                        class="py-2 px-4 bg-green-500 hover:bg-green-700 text-white rounded-md flex items-center justify-center">
+                        <FileUploadIcon class="h-5 w-5 mr-2" />
+                        Batch Upload
+                    </Link>
+                    <!-- Mobile sidebar toggle -->
+                    <button @click="showSidebar = !showSidebar" class="md:hidden px-3 py-1.5 border border-gray-300 dark:border-gray-600 shadow-sm text-sm font-medium rounded-md text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
             </div>
         </template>
 
@@ -512,11 +542,12 @@ const showInstructions = ref(false);
                              :class="{ 'rotate-180': showInstructions }"
                              xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                        </svg>
-                                    </div>
+                        </svg>
+                    </div>
                     <div v-if="showInstructions" class="p-6 text-gray-700 dark:text-gray-300">
                         <ul class="list-disc list-inside space-y-2">
-                            <li>Use the <span class="font-semibold">search box</span> to filter students by name or ID.</li>
+                            <li>Use the <span class="font-semibold">Batch Upload</span> button above to upload multiple students at once using a CSV or Excel file.</li>
+                            <li>Use the <span class="font-semibold">search box</span> to filter students by name.</li>
                             <li>Filter students by <span class="font-semibold">course</span>, <span class="font-semibold">school year</span>, or <span class="font-semibold">NSTP status</span>.</li>
                             <li>Click the <span class="font-semibold">Add Student</span> button to register new students.</li>
                             <li>Select multiple students and use the <span class="font-semibold">Download Certificate</span> button to generate certificates for students who have passed both NSTP 1 and NSTP 2.</li>
@@ -524,8 +555,8 @@ const showInstructions = ref(false);
                             <li>Click on <span class="font-semibold">Edit</span> (pencil icon) to modify student information.</li>
                             <li>Click on <span class="font-semibold">Delete</span> (trash icon) to remove a student from the system.</li>
                         </ul>
-                                </div>
-                            </div>
+                    </div>
+                </div>
 
                 <div class="flex flex-col md:flex-row gap-4">
                     <!-- Sidebar -->
@@ -699,10 +730,6 @@ const showInstructions = ref(false);
                                     </th>
                                     <th scope="col"
                                         class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                        Student ID
-                                    </th>
-                                    <th scope="col"
-                                        class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                                         Name
                                     </th>
                                     <th scope="col"
@@ -746,11 +773,8 @@ const showInstructions = ref(false);
                                     <td class="px-4 py-3 whitespace-nowrap text-xs text-gray-900 dark:text-gray-300">
                                         {{ student.seq_no }}
                                     </td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-xs text-gray-900 dark:text-gray-300">
-                                        {{ student.student_id }}
-                                    </td>
                                     <td class="px-4 py-3 text-sm text-gray-900 dark:text-gray-300 max-w-[200px] truncate"
-                                        title="{{ student.last_name + ', ' + student.first_name + ' ' + student.middle_name }}">
+                                        :title="student.last_name + ', ' + student.first_name + ' ' + student.middle_name">
                                         {{ student.last_name + ", " + student.first_name + " " + student.middle_name }}
                                     </td>
                                     <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
